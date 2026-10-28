@@ -1,12 +1,18 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SolarFlow.Api.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// 1. Реєстрація сервісів у контейнері DI (ДО builder.Build())
 builder.Services.AddOpenApi();
+
+// Реєстрація DbContext із Scoped lifetime для SQLite
+builder.Services.AddDbContext<SolarFlowDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 2. Налаштування конвеєра обробки HTTP-запитів (Middleware)
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -21,7 +27,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
