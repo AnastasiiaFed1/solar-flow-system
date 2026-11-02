@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  solarflow-db:
+    image: postgres:16-alpine
+    container_name: solarflow-db
+    environment:
+      POSTGRES_DB: SolarFlowDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: StrongPassword123!
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  solarflow-api:
+    build:
+      context: ./backend/SolarFlow.Api
+      dockerfile: Dockerfile
+    container_name: solarflow-api
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=solarflow-db;Database=SolarFlowDb;Username=postgres;Password=StrongPassword123!
+    depends_on:
+      - solarflow-db
+    restart: always
+
+volumes:
+  postgres_data:
