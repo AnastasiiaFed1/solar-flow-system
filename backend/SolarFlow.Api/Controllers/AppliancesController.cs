@@ -15,57 +15,63 @@ namespace SolarFlow.Api.Controllers
             _applianceService = applianceService;
         }
 
-        [HttpGet("station/{stationId}")]
-        public async Task<ActionResult<IEnumerable<ApplianceDto>>> GetByStation(
-            int stationId,
-            [FromQuery] int? priority,
-            [FromQuery] string? search)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ApplianceDto>>> GetAll()
         {
-            var result = await _applianceService.GetByStationIdAsync(stationId, priority, search);
-            return Ok(result);
+            var appliances = await _applianceService.GetAllAsync();
+            return Ok(appliances);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<ApplianceDto>> GetById(int id)
         {
-            var result = await _applianceService.GetByIdAsync(id);
-            if (result == null)
-                return NotFound(new { message = $"Прилад з ID {id} не знайдено" });
-
-            return Ok(result);
+            var appliance = await _applianceService.GetByIdAsync(id);
+            if (appliance == null)
+            {
+                return NotFound(new { message = $"Appliance with ID {id} not found." });
+            }
+            return Ok(appliance);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApplianceDto>> Create([FromBody] CreateApplianceDto dto)
+        public async Task<ActionResult<ApplianceDto>> Create([FromBody] CreateApplianceDto createDto)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            var created = await _applianceService.CreateAsync(dto);
+            var created = await _applianceService.CreateAsync(createDto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CreateApplianceDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ApplianceDto>> Update(int id, [FromBody] UpdateApplianceDto updateDto)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            var updated = await _applianceService.UpdateAsync(id, dto);
-            if (!updated)
-                return NotFound(new { message = $"Прилад з ID {id} не знайдено" });
+            var updated = await _applianceService.UpdateAsync(id, updateDto);
+            if (updated == null)
+            {
+                return NotFound(new { message = $"Appliance with ID {id} not found." });
+            }
 
-            return NoContent();
+            return Ok(updated);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _applianceService.DeleteAsync(id);
             if (!deleted)
-                return NotFound(new { message = $"Прилад з ID {id} не знайдено" });
+            {
+                return NotFound(new { message = $"Appliance with ID {id} not found." });
+            }
 
-            return Ok(new { message = "Прилад успішно видалено" });
+            return NoContent();
         }
     }
 }

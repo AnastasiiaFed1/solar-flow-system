@@ -1,77 +1,83 @@
-﻿using SolarFlow.Api.Dtos.Appliance;
+﻿using Microsoft.EntityFrameworkCore;
+using SolarFlow.Api.Data;
+using SolarFlow.Api.Dtos.Appliance;
+using SolarFlow.Api.Models;
 using SolarFlow.Api.Services.Interfaces;
 
 namespace SolarFlow.Api.Services.Implementations
 {
     public class ApplianceService : IApplianceService
     {
-        private static readonly List<ApplianceDto> _appliances = new()
+        private readonly SolarFlowDbContext _context;
+
+        public ApplianceService(SolarFlowDbContext context)
         {
-            new ApplianceDto { Id = 1, Name = "Холодильник", PowerConsumptionWatts = 150, Priority = 1, IsSmartGridEnabled = false, SolarStationId = 1 },
-            new ApplianceDto { Id = 2, Name = "Бойлер", PowerConsumptionWatts = 2000, Priority = 2, IsSmartGridEnabled = true, SolarStationId = 1 },
-            new ApplianceDto { Id = 3, Name = "Зарядка EV", PowerConsumptionWatts = 3500, Priority = 3, IsSmartGridEnabled = true, SolarStationId = 1 }
-        };
+            _context = context;
+        }
 
-        public async Task<IEnumerable<ApplianceDto>> GetByStationIdAsync(int stationId, int? priority = null, string? search = null)
+        public async Task<IEnumerable<ApplianceDto>> GetAllAsync()
         {
-            var query = _appliances.Where(a => a.SolarStationId == stationId).AsQueryable();
-
-            if (priority.HasValue)
-            {
-                query = query.Where(a => a.Priority == priority.Value);
-            }
-
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                query = query.Where(a => a.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
-            }
-
-            return await Task.FromResult(query.ToList());
+            return await _context.Appliances
+                .AsNoTracking()
+                .Select(a => MapToDto(a))
+                .ToListAsync();
         }
 
         public async Task<ApplianceDto?> GetByIdAsync(int id)
         {
-            var item = _appliances.FirstOrDefault(a => a.Id == id);
-            return await Task.FromResult(item);
+            var appliance = await _context.Appliances.FindAsync(id);
+            return appliance == null ? null : MapToDto(appliance);
         }
 
-        public async Task<ApplianceDto> CreateAsync(CreateApplianceDto dto)
+        public async Task<ApplianceDto> CreateAsync(CreateApplianceDto createDto)
         {
-            var newId = _appliances.Any() ? _appliances.Max(a => a.Id) + 1 : 1;
-            var newAppliance = new ApplianceDto
+            var appliance = new Appliance
             {
-                Id = newId,
-                Name = dto.Name,
-                PowerConsumptionWatts = dto.PowerConsumptionWatts,
-                Priority = dto.Priority,
-                IsSmartGridEnabled = dto.IsSmartGridEnabled,
-                SolarStationId = dto.SolarStationId
+                Name = createDto.Name,
+                PowerWatts = createDto.PowerConsumptionWatts,
+                IsActive = createDto.IsSmartGridEnabled
             };
 
-            _appliances.Add(newAppliance);
-            return await Task.FromResult(newAppliance);
+            _context.Appliances.Add(appliance);
+            await _context.SaveChangesAsync();
+
+            return MapToDto(appliance);
         }
 
-        public async Task<bool> UpdateAsync(int id, CreateApplianceDto dto)
+        public async Task<ApplianceDto?> UpdateAsync(int id, UpdateApplianceDto updateDto)
         {
-            var existing = _appliances.FirstOrDefault(a => a.Id == id);
-            if (existing == null) return await Task.FromResult(false);
+            var appliance = await _context.Appliances.FindAsync(id);
+            if (appliance == null) return null;
 
-            existing.Name = dto.Name;
-            existing.PowerConsumptionWatts = dto.PowerConsumptionWatts;
-            existing.Priority = dto.Priority;
-            existing.IsSmartGridEnabled = dto.IsSmartGridEnabled;
+            appliance.Name = updateDto.Name;
+            appliance.PowerWatts = updateDto.PowerConsumptionWatts;
+            appliance.IsActive = updateDto.IsSmartGridEnabled;
 
-            return await Task.FromResult(true);
+            await _context.SaveChangesAsync();
+            return MapToDto(appliance);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var existing = _appliances.FirstOrDefault(a => a.Id == id);
-            if (existing == null) return await Task.FromResult(false);
+            var appliance = await _context.Appliances.FindAsync(id);
+            if (appliance == null) return false;
 
-            _appliances.Remove(existing);
-            return await Task.FromResult(true);
+            _context.Appliances.Remove(appliance);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        private static ApplianceDto MapToDto(Appliance appliance)
+        {
+            return new ApplianceDto
+            {
+                Id = appliance.Id,
+                Name = appliance.Name,
+                PowerConsumptionWatts = appliance.PowerWatts,
+                Priority = 1, // Значення за замовчуванням для DTO
+                IsSmartGridEnabled = appliance.IsActive,
+                SolarStationId = 1 // Значення за замовчуванням для DTO
+            };
         }
     }
 }
