@@ -20,14 +20,21 @@ public class LoginViewModel : BaseViewModel
         LoginCommand = new Command(async () => await OnLogin());
     }
 
-    private async Task OnLogin()
+    // Змінено private на public для безперешкодного виклику в Unit-тестах
+    public async Task OnLogin()
     {
         if (IsBusy) return;
         IsBusy = true;
         bool ok = await _authService.LoginAsync(Email, Password);
         IsBusy = false;
 
-        if (ok) await Shell.Current.GoToAsync("//StationsPage");
-        else await Shell.Current.DisplayAlert("Помилка", "Невірно введені дані", "OK");
+        // Перевіряємо Shell.Current на null, щоб у тестах без заповненого UI не виникав NullReferenceException
+        if (Shell.Current != null)
+        {
+            if (ok)
+                await Shell.Current.GoToAsync("//StationsPage");
+            else
+                await Shell.Current.DisplayAlert("Помилка", "Невірно введені дані", "OK");
+        }
     }
 }
