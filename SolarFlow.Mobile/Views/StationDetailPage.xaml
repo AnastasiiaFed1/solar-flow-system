@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SolarFlow.Mobile.Views.StationDetailPage"
+             Title="{Binding Title}">
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="15">
+            <Button Text="Оновити список приладів" Command="{Binding LoadAppliancesCommand}" />
+            <CollectionView ItemsSource="{Binding Appliances}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5" Padding="15" CornerRadius="10">
+                            <HorizontalStackLayout Spacing="20">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" VerticalOptions="Center" WidthRequest="150" />
+                                <Label Text="{Binding PowerConsumptionWatts, StringFormat='{0} Вт'}" VerticalOptions="Center" />
+                                <Switch IsToggled="{Binding IsActive}" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

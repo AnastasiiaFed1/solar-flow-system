@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell
+    x:Class="SolarFlow.Mobile.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:SolarFlow.Mobile.Views"
+    Title="SolarFlow.Mobile">
+
+    <TabBar>
+        <Tab Title="Авторизація">
+            <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" />
+        </Tab>
+        <Tab Title="Станція">
+            <ShellContent ContentTemplate="{DataTemplate views:StationDetailPage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>

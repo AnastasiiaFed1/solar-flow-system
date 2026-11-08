@@ -1,5 +1,5 @@
-using SolarFlow.Mobile.Services;
-using SolarFlow.Mobile.ViewModels;
+using SolarFlow.Core.Services;
+using SolarFlow.Core.ViewModels;
 using SolarFlow.Mobile.Views;
 
 namespace SolarFlow.Mobile;
@@ -20,7 +20,11 @@ public static class MauiProgram
         builder.Services.AddSingleton<IApiService, ApiService>();
 
         builder.Services.AddTransient<LoginViewModel>();
+        builder.Services.AddTransient<StationDetailViewModel>();
+        builder.Services.AddTransient<StationsViewModel>();
+
         builder.Services.AddTransient<LoginPage>();
+        builder.Services.AddTransient<StationDetailPage>();
 
         return builder.Build();
     }

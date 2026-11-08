@@ -1,4 +1,4 @@
-namespace SolarFlow.Mobile.Models;
+namespace SolarFlow.Core.Models;
 
 public class SolarStationModel
 {

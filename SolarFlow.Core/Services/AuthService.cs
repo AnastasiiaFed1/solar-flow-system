@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
 
-namespace SolarFlow.Mobile.Services;
+namespace SolarFlow.Core.Services;
 
 public class AuthService : IAuthService
 {

@@ -1,7 +1,7 @@
 using System.Windows.Input;
-using SolarFlow.Mobile.Services;
+using SolarFlow.Core.Services;
 
-namespace SolarFlow.Mobile.ViewModels;
+namespace SolarFlow.Core.ViewModels;
 
 public class LoginViewModel : BaseViewModel
 {

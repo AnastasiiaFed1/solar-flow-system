@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace SolarFlow.Mobile.ViewModels;
+namespace SolarFlow.Core.ViewModels;
 
 public class BaseViewModel : INotifyPropertyChanged
 {
