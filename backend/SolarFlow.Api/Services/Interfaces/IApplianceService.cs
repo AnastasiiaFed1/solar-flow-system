@@ -4,7 +4,7 @@ namespace SolarFlow.Api.Services.Interfaces
 {
     public interface IApplianceService
     {
-        Task<IEnumerable<ApplianceDto>> GetAllAsync();
+        Task<IEnumerable<ApplianceDto>> GetAllAsync(double? minPower = null, double? maxPower = null, bool? isActive = null);
         Task<ApplianceDto?> GetByIdAsync(int id);
         Task<ApplianceDto> CreateAsync(CreateApplianceDto createDto);
         Task<ApplianceDto?> UpdateAsync(int id, UpdateApplianceDto updateDto);

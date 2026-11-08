@@ -16,9 +16,12 @@ namespace SolarFlow.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ApplianceDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ApplianceDto>>> GetAll(
+        [FromQuery] double? minPower,
+        [FromQuery] double? maxPower,
+        [FromQuery] bool? isActive)
         {
-            var appliances = await _applianceService.GetAllAsync();
+            var appliances = await _applianceService.GetAllAsync(minPower, maxPower, isActive);
             return Ok(appliances);
         }
 
