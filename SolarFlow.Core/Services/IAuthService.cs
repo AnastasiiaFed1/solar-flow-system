@@ -1,4 +1,4 @@
-namespace SolarFlow.Mobile.Services;
+namespace SolarFlow.Core.Services;
 
 public interface IAuthService
 {

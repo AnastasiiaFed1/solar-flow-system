@@ -2,12 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SolarFlow.Mobile.Views.LoginPage"
-             Title="{Binding Title}">
+             Title="Авторизація">
     <VerticalStackLayout Padding="30" Spacing="15" VerticalOptions="Center">
-        <Label Text="SolarFlow System" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center" />
-        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
-        <Entry Placeholder="������" Text="{Binding Password}" IsPassword="True" />
-        <Button Text="�����" Command="{Binding LoginCommand}" />
-        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        <Label Text="Вхід у SolarFlow" FontSize="24" HorizontalOptions="Center" FontAttributes="Bold" />
+        <Entry Placeholder="Логін" />
+        <Entry Placeholder="Пароль" IsPassword="True" />
+        <Button Text="Увійти" />
     </VerticalStackLayout>
 </ContentPage>
