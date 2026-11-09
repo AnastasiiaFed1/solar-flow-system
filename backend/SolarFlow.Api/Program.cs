@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SolarFlow.Api.Data;
+using SolarFlow.Api.Middleware;
 using SolarFlow.Api.Services.Implementations;
 using SolarFlow.Api.Services.Interfaces;
 
@@ -19,6 +20,8 @@ builder.Services.AddScoped<IApplianceService, ApplianceService>();
 var app = builder.Build();
 
 // 2. Налаштування конвеєра обробки HTTP-запитів (Middleware)
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

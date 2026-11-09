@@ -15,10 +15,27 @@ namespace SolarFlow.Api.Services.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<ApplianceDto>> GetAllAsync()
+        public async Task<IEnumerable<ApplianceDto>> GetAllAsync(double? minPower = null, double? maxPower = null, bool? isActive = null)
         {
-            return await _context.Appliances
-                .AsNoTracking()
+            var query = _context.Appliances.AsNoTracking().AsQueryable();
+
+            // LINQ-фільтрація
+            if (minPower.HasValue)
+            {
+                query = query.Where(a => a.PowerWatts >= minPower.Value);
+            }
+
+            if (maxPower.HasValue)
+            {
+                query = query.Where(a => a.PowerWatts <= maxPower.Value);
+            }
+
+            if (isActive.HasValue)
+            {
+                query = query.Where(a => a.IsActive == isActive.Value);
+            }
+
+            return await query
                 .Select(a => MapToDto(a))
                 .ToListAsync();
         }
