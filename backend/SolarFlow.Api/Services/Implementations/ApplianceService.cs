@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SolarFlow.Api.Data;
 using SolarFlow.Api.Dtos.Appliance;
 using SolarFlow.Api.Models;
@@ -48,11 +48,15 @@ namespace SolarFlow.Api.Services.Implementations
 
         public async Task<ApplianceDto> CreateAsync(CreateApplianceDto createDto)
         {
+            await ValidateStationAsync(createDto.SolarStationId);
+
             var appliance = new Appliance
             {
                 Name = createDto.Name,
                 PowerWatts = createDto.PowerConsumptionWatts,
-                IsActive = createDto.IsSmartGridEnabled
+                SolarStationId = createDto.SolarStationId,
+                Priority = createDto.Priority,
+                IsSmartGridEnabled = createDto.IsSmartGridEnabled
             };
 
             _context.Appliances.Add(appliance);
@@ -66,9 +70,13 @@ namespace SolarFlow.Api.Services.Implementations
             var appliance = await _context.Appliances.FindAsync(id);
             if (appliance == null) return null;
 
+            await ValidateStationAsync(updateDto.SolarStationId);
+
             appliance.Name = updateDto.Name;
             appliance.PowerWatts = updateDto.PowerConsumptionWatts;
-            appliance.IsActive = updateDto.IsSmartGridEnabled;
+            appliance.SolarStationId = updateDto.SolarStationId;
+            appliance.Priority = updateDto.Priority;
+            appliance.IsSmartGridEnabled = updateDto.IsSmartGridEnabled;
 
             await _context.SaveChangesAsync();
             return MapToDto(appliance);
@@ -84,6 +92,14 @@ namespace SolarFlow.Api.Services.Implementations
             return true;
         }
 
+        private async Task ValidateStationAsync(int stationId)
+        {
+            if (!await _context.SolarStations.AnyAsync(station => station.Id == stationId))
+            {
+                throw new SolarFlow.Api.Services.InvalidSolarStationException(stationId);
+            }
+        }
+
         private static ApplianceDto MapToDto(Appliance appliance)
         {
             return new ApplianceDto
@@ -91,9 +107,9 @@ namespace SolarFlow.Api.Services.Implementations
                 Id = appliance.Id,
                 Name = appliance.Name,
                 PowerConsumptionWatts = appliance.PowerWatts,
-                Priority = 1, // Значення за замовчуванням для DTO
-                IsSmartGridEnabled = appliance.IsActive,
-                SolarStationId = 1 // Значення за замовчуванням для DTO
+                Priority = appliance.Priority,
+                IsSmartGridEnabled = appliance.IsSmartGridEnabled,
+                SolarStationId = appliance.SolarStationId
             };
         }
     }

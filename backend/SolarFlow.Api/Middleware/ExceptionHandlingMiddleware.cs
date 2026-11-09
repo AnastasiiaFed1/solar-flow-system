@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SolarFlow.Api.Middleware
@@ -19,6 +19,20 @@ namespace SolarFlow.Api.Middleware
             try
             {
                 await _next(context);
+            }
+            catch (SolarFlow.Api.Services.InvalidSolarStationException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(new ValidationProblemDetails(
+                    new Dictionary<string, string[]>
+                    {
+                        ["SolarStationId"] = new[] { ex.Message }
+                    })
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "One or more validation errors occurred.",
+                    Instance = context.Request.Path
+                }, options: (System.Text.Json.JsonSerializerOptions?)null, contentType: "application/problem+json");
             }
             catch (Exception ex)
             {

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace SolarFlow.Api.Dtos.Appliance
 {
@@ -16,7 +16,7 @@ namespace SolarFlow.Api.Dtos.Appliance
 
         public bool IsSmartGridEnabled { get; set; }
 
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "SolarStationId must be a positive integer.")]
         public int SolarStationId { get; set; }
     }
 }
