@@ -23,7 +23,7 @@
 ## Current limitations
 SQLite and PostgreSQL are selected by Database:Provider. SolarFlowDbContext keeps the existing SQLite migration history; PostgreSqlDbContext inherits the domain configuration and has its own PostgreSQL migrations. The PostgreSQL integration test runs against an actual server when SOLARFLOW_TEST_POSTGRES is set. The Docker image build itself requires Docker and was not run locally.
 UserId is a string ownership identifier; a user-table foreign key awaits the agreed authentication model.
-New databases contain no sample stations yet. DbInitializer and sample data are the next separate task.
+Optional DbInitializer demonstration data is implemented in issue #25; it is disabled by default and never merged into a non-empty database.
 
 ## Validation cases
 Automated tests cover a fresh database, repeated migration, legacy appliance preservation, persisted appliance fields, unknown station handling, invalid station angles/coordinates, invalid priority, foreign keys, cascades and the 400 validation response.
@@ -42,3 +42,19 @@ Tests use real SQLite in-memory databases with migrations, not EF Core's non-rel
 - PostgreSQL tests apply migrations twice, round-trip appliance and UTC telemetry data, reject invalid priority and orphan records, and verify cascades.
 - Configuration tests check both providers, unknown providers, missing connection strings and legacy overrides.
 - GitHub Actions execution and the Docker image build remain to be verified in their respective environments.
+
+## Initializer decisions (issue #25)
+11. Use EF Core 9 UseSeeding and UseAsyncSeeding hooks, so migration locking protects the empty-check and insertion. See [EF Core seeding documentation](https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding). Both CLI and asynchronous startup paths are supported.
+12. Gate demo initialization with Database:SeedDemoData, default false in every environment. Startup applies migrations only when this opt-in flag is true; normal production startup remains unchanged.
+13. Seed only a completely empty domain database. Any existing station/equipment/appliance/telemetry row causes the initializer to skip all inserts. This preserves user edits, legacy data and partially removed demo sets.
+14. Insert one related graph in a transaction, reusing EF's migration transaction where present. Generated keys avoid hard-coded identity values. Demonstration ownership is a placeholder without account creation.
+15. Use deterministic UTC telemetry samples for reproducible demonstrations. No schema changes or new migrations are required for optional seed data.
+
+## Validation for issue #25
+- 32 tests passed with zero skipped tests, including real PostgreSQL tests.
+- Both sync and async seeding paths populate the expected graph without duplicates.
+- Existing user data is preserved; changed demo station names are not reset.
+- Disabled/missing configuration leaves domain tables empty.
+- Simulated equipment insertion failures on SQLite and PostgreSQL roll back all seed rows.
+- Existing migration snapshots remain unchanged.
+- Startup smoke check: the API returns 4 demo appliances; a restart preserves the count; disabled initialization creates no new production database.
