@@ -1,0 +1,53 @@
+name: Backend database tests
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-tests.yml'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  database-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: solarflow-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      SOLARFLOW_TEST_POSTGRES: 'Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=solarflow-ci-only'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Run SQLite and PostgreSQL tests
+        run: dotnet test backend/SolarFlow.Api.Tests/SolarFlow.Api.Tests.csproj --configuration Release --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults
+      - name: Install EF CLI
+        run: dotnet tool install --global dotnet-ef --version 9.0.0
+      - name: Check SQLite snapshot
+        run: dotnet ef migrations has-pending-model-changes --context SolarFlowDbContext --project backend/SolarFlow.Api/SolarFlow.Api.csproj -- --Database:Provider=SQLite
+      - name: Check PostgreSQL snapshot
+        run: dotnet ef migrations has-pending-model-changes --context PostgreSqlDbContext --project backend/SolarFlow.Api/SolarFlow.Api.csproj -- --Database:Provider=PostgreSQL
+      - name: Upload test and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-results
+          path: TestResults/

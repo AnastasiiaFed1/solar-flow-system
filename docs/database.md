@@ -21,7 +21,7 @@
 6. Validate referenced stations before appliance writes so a missing station produces a 400 response rather than an unhandled foreign-key error.
 
 ## Current limitations
-This stage supports SQLite. PostgreSQL migrations and provider selection are a separate follow-up, and the existing Docker Compose PostgreSQL setup is not validated by this stage.
+SQLite and PostgreSQL are selected by Database:Provider. SolarFlowDbContext keeps the existing SQLite migration history; PostgreSqlDbContext inherits the domain configuration and has its own PostgreSQL migrations. The PostgreSQL integration test runs against an actual server when SOLARFLOW_TEST_POSTGRES is set. The Docker image build itself requires Docker and was not run locally.
 UserId is a string ownership identifier; a user-table foreign key awaits the agreed authentication model.
 New databases contain no sample stations yet. DbInitializer and sample data are the next separate task.
 
@@ -29,3 +29,16 @@ New databases contain no sample stations yet. DbInitializer and sample data are 
 Automated tests cover a fresh database, repeated migration, legacy appliance preservation, persisted appliance fields, unknown station handling, invalid station angles/coordinates, invalid priority, foreign keys, cascades and the 400 validation response.
 
 Tests use real SQLite in-memory databases with migrations, not EF Core's non-relational InMemory provider.
+
+## Provider decisions (issue #23)
+7. Keep provider-specific migration sets using two context types in the same assembly, as described in the [EF Core documentation](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/providers). This preserves published SQLite migrations and prevents PostgreSQL from executing SQLite-specific column definitions.
+8. Keep services dependent on SolarFlowDbContext. DI resolves the PostgreSQL subclass when PostgreSQL is selected, so controllers and services do not depend on the provider.
+9. Keep explicit legacy DefaultConnection overrides working; use SQLite/PostgreSQL named connections for new configuration. Provider selection does not transfer data between engines.
+10. Align Docker images with the existing net9.0 target and explicitly bind port 80 to match Compose. No authentication or sample data is introduced by this task.
+
+## Validation for issue #23
+- 22 tests passed with no skipped tests, including a real PostgreSQL 16.4 integration test on an isolated temporary localhost server.
+- SQLite legacy upgrade tests still pass.
+- PostgreSQL tests apply migrations twice, round-trip appliance and UTC telemetry data, reject invalid priority and orphan records, and verify cascades.
+- Configuration tests check both providers, unknown providers, missing connection strings and legacy overrides.
+- GitHub Actions execution and the Docker image build remain to be verified in their respective environments.

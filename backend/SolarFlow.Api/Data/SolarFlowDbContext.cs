@@ -7,6 +7,8 @@ public class SolarFlowDbContext : DbContext
 {
     public SolarFlowDbContext(DbContextOptions<SolarFlowDbContext> options) : base(options) { }
 
+    protected SolarFlowDbContext(DbContextOptions options) : base(options) { }
+
     public DbSet<Appliance> Appliances => Set<Appliance>();
     public DbSet<SolarStation> SolarStations => Set<SolarStation>();
     public DbSet<Equipment> Equipment => Set<Equipment>();
