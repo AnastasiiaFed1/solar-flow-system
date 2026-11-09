@@ -28,7 +28,7 @@
 
 ```powershell
 dotnet test backend/SolarFlow.Api.Tests/SolarFlow.Api.Tests.csproj --collect:"XPlat Code Coverage"
-dotnet ef migrations has-pending-model-changes --project backend/SolarFlow.Api/SolarFlow.Api.csproj
+dotnet ef migrations has-pending-model-changes --context SolarFlowDbContext --project backend/SolarFlow.Api/SolarFlow.Api.csproj
 ```
 
 Локальний результат: 13 тестів успішні, незбережених у міграціях змін моделі немає. Перед завершенням issue перевірити ці результати у власному середовищі та під час review.

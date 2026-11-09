@@ -1,4 +1,3 @@
-﻿using Microsoft.EntityFrameworkCore;
 using SolarFlow.Api.Data;
 using SolarFlow.Api.Middleware;
 using SolarFlow.Api.Services.Implementations;
@@ -10,9 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(); // Додаємо підтримку контролерів
 builder.Services.AddOpenApi();
 
-// Реєстрація DbContext із Scoped lifetime для SQLite
-builder.Services.AddDbContext<SolarFlowDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Select provider and validate database configuration before startup.
+builder.Services.AddSolarDatabase(builder.Configuration);
 
 // Реєстрація вашого сервісу для приладів
 builder.Services.AddScoped<IApplianceService, ApplianceService>();

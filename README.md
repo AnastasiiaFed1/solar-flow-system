@@ -3,34 +3,74 @@
 ## Backend prerequisites
 
 - .NET SDK 9 or a newer SDK capable of targeting net9.0.
-- EF Core CLI. The API currently uses EF Core 9.0.0; a matching CLI can be installed with `dotnet tool install --global dotnet-ef --version 9.0.0`.
+- EF Core CLI 9.0.0: `dotnet tool install --global dotnet-ef --version 9.0.0`.
+- PostgreSQL 16 (or Docker Compose) when using PostgreSQL.
 
-Run commands below from the repository root.
+Run the commands below from the repository root. Keep the same provider and connection configuration for migrations and API startup.
 
-## SQLite development setup
-
-The current database stage supports SQLite. The existing PostgreSQL Docker Compose configuration needs the separate provider-selection task before it can run this API correctly.
-
-To start with a separate development database, leaving the checked-in database unchanged:
+## SQLite
 
 ```powershell
-$env:ConnectionStrings__DefaultConnection = "Data Source=solarflow.local.db"
+Remove-Item Env:ConnectionStrings__DefaultConnection -ErrorAction SilentlyContinue
+$env:Database__Provider = "SQLite"
+$env:ConnectionStrings__SQLite = "Data Source=solarflow.local.db"
 dotnet restore backend/SolarFlow.Api/SolarFlow.Api.csproj
-dotnet ef database update --project backend/SolarFlow.Api/SolarFlow.Api.csproj
+dotnet ef database update --context SolarFlowDbContext --project backend/SolarFlow.Api/SolarFlow.Api.csproj
 dotnet run --project backend/SolarFlow.Api/SolarFlow.Api.csproj --no-launch-profile -- --urls http://localhost:5080
 ```
 
-Use the same connection string for migrations and API startup. A relative SQLite file path is resolved from the current working directory. The new database has no sample data at this stage; `GET http://localhost:5080/api/appliances` returns an empty list. Creating an appliance requires an existing SolarStation. The DbInitializer task will provide development sample stations.
+A relative SQLite file path is resolved from the current working directory. This setup leaves the checked-in database unchanged. Back up an existing database while the API is stopped before applying migrations to it.
 
-Before upgrading an existing database, back it up while the API is stopped. The AddStationDomain migration retains old appliances and links them to an imported station with ownership explicitly unassigned. See [database notes](docs/database.md).
+## PostgreSQL
+
+Start a local PostgreSQL 16 server, or start only the database service:
+
+```powershell
+docker compose up -d solarflow-db
+```
+
+For the development database configured in docker-compose.yml:
+
+```powershell
+Remove-Item Env:ConnectionStrings__DefaultConnection -ErrorAction SilentlyContinue
+$env:Database__Provider = "PostgreSQL"
+$env:ConnectionStrings__PostgreSQL = "Host=localhost;Port=5432;Database=SolarFlowDb;Username=postgres;Password=StrongPassword123!"
+dotnet ef database update --context PostgreSqlDbContext --project backend/SolarFlow.Api/SolarFlow.Api.csproj
+dotnet run --project backend/SolarFlow.Api/SolarFlow.Api.csproj --no-launch-profile -- --urls http://localhost:5080
+```
+
+The password above belongs to the existing local Compose example. Supply deployment credentials through environment variables, not tracked appsettings files. To run the API container after migrating the database, use `docker compose up -d --build solarflow-api`.
+
+New databases contain no sample stations yet. `GET http://localhost:5080/api/appliances` returns an empty list. Creating an appliance requires an existing SolarStation; DbInitializer is the next task.
+
+## Configuration
+
+`Database:Provider` accepts SQLite or PostgreSQL (case-insensitive); SQLite is the default. Each provider uses its own named connection string. Unknown providers and missing connection strings fail with an explicit startup error. An explicitly configured legacy `ConnectionStrings:DefaultConnection` overrides the named connection for compatibility; remove it when switching providers.
+
+Each provider has its own context type and migration history, sharing the domain configuration. Always specify `--context` in EF CLI commands. Existing SQLite migrations stay in place; PostgreSQL migrations are in `Migrations/PostgreSQL`. Switching a provider selects another database; it does not copy existing data between databases.
 
 ## Automated tests
 
 ```powershell
 dotnet test backend/SolarFlow.Api.Tests/SolarFlow.Api.Tests.csproj --collect:"XPlat Code Coverage"
-dotnet ef migrations has-pending-model-changes --project backend/SolarFlow.Api/SolarFlow.Api.csproj
 ```
 
-Tests use isolated SQLite databases in memory. They do not migrate the checked-in `solarflow.db`. Coverage output is written under `backend/SolarFlow.Api.Tests/TestResults/`; report percentages are tool-generated, not estimated.
+SQLite tests use isolated databases in memory. To include the PostgreSQL integration test:
 
-The local issue draft for this stage is in [docs/issues/database-entities.md](docs/issues/database-entities.md).
+```powershell
+$env:SOLARFLOW_TEST_POSTGRES = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=StrongPassword123!"
+dotnet test backend/SolarFlow.Api.Tests/SolarFlow.Api.Tests.csproj --collect:"XPlat Code Coverage"
+```
+
+The PostgreSQL test account must be allowed to create databases. The test creates and deletes only a new database named `solarflow_test_<random GUID>`, never the database named in the supplied connection string. Without SOLARFLOW_TEST_POSTGRES, the PostgreSQL integration test is explicitly skipped; the remaining tests still run. Coverage reports are generated under `backend/SolarFlow.Api.Tests/TestResults/`.
+
+Check both migration snapshots:
+
+```powershell
+dotnet ef migrations has-pending-model-changes --context SolarFlowDbContext --project backend/SolarFlow.Api/SolarFlow.Api.csproj -- --Database:Provider=SQLite
+dotnet ef migrations has-pending-model-changes --context PostgreSqlDbContext --project backend/SolarFlow.Api/SolarFlow.Api.csproj -- --Database:Provider=PostgreSQL
+```
+
+The backend GitHub Actions workflow runs tests with PostgreSQL 16, checks both snapshots and uploads test/coverage reports. Its first remote run is pending until this branch is pushed and a PR is opened.
+
+See [database conventions and decisions](docs/database.md).
