@@ -25,13 +25,23 @@ public static class DatabaseServiceCollectionExtensions
             throw new InvalidOperationException($"ConnectionStrings:{connectionName} is required.");
         }
 
+        var seedDemoData = configuration.GetValue<bool>("Database:SeedDemoData");
+
         if (isSqlite)
         {
-            services.AddDbContext<SolarFlowDbContext>(options => options.UseSqlite(connection));
+            services.AddDbContext<SolarFlowDbContext>(options =>
+            {
+                options.UseSqlite(connection);
+                DbInitializer.ConfigureDemoData(options, seedDemoData);
+            });
         }
         else
         {
-            services.AddDbContext<PostgreSqlDbContext>(options => options.UseNpgsql(connection));
+            services.AddDbContext<PostgreSqlDbContext>(options =>
+            {
+                options.UseNpgsql(connection);
+                DbInitializer.ConfigureDemoData(options, seedDemoData);
+            });
             services.AddScoped<SolarFlowDbContext>(sp => sp.GetRequiredService<PostgreSqlDbContext>());
         }
         return services;

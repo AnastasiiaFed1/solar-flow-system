@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SolarFlow.Api.Data;
 using SolarFlow.Api.Middleware;
 using SolarFlow.Api.Services.Implementations;
@@ -16,6 +17,14 @@ builder.Services.AddSolarDatabase(builder.Configuration);
 builder.Services.AddScoped<IApplianceService, ApplianceService>();
 
 var app = builder.Build();
+
+// Demo initialization is opt-in; production default never migrates or seeds on startup.
+if (app.Configuration.GetValue<bool>("Database:SeedDemoData"))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var database = scope.ServiceProvider.GetRequiredService<SolarFlowDbContext>();
+    await database.Database.MigrateAsync();
+}
 
 // 2. Налаштування конвеєра обробки HTTP-запитів (Middleware)
 app.UseMiddleware<ExceptionHandlingMiddleware>();
