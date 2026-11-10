@@ -1,0 +1,86 @@
+
+<footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="footer-logo">☀️ SolarFlow</span>
+        <p>
+          Платформа для проєктування, моніторингу та
+          моделювання сонячних електростанцій.
+        </p>
+      </div>
+  
+      <div class="footer-links">
+        <a href="/">Головна</a>
+        <a href="/features">Можливості</a>
+        <a href="/service">Сервіс</a>
+      </div>
+  
+      <div class="footer-copyright">
+        © {new Date().getFullYear()} SolarFlow
+      </div>
+    </div>
+  </footer>
+  
+  <style>
+    .site-footer {
+      width: 100%;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      padding: 40px 24px;
+    }
+  
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+    }
+  
+    .footer-brand {
+      max-width: 360px;
+    }
+  
+    .footer-logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--color-primary);
+    }
+  
+    .footer-brand p {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--color-muted);
+      line-height: 1.6;
+    }
+  
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  
+    .footer-links a {
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: 14px;
+    }
+  
+    .footer-links a:hover {
+      color: #15803d;
+    }
+  
+    .footer-copyright {
+      font-size: 13px;
+      color: #64748b;
+    }
+  
+    @media (max-width: 700px) {
+      .footer-container {
+        flex-direction: column;
+        gap: 24px;
+      }
+    }
+  </style>
+  
