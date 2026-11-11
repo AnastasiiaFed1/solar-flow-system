@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EnergyStoreDemo from '../components/react/EnergyStoreDemo';
+import EnergyStoreVueDemo from '../components/vue/EnergyStoreVueDemo.vue';
+import EnergyStoreSvelteDemo from '../components/svelte/EnergyStoreSvelteDemo.svelte';
+---
+
+<Layout
+  title="Тест Nano Stores — SolarFlow"
+  description="Перевірка спільного стану енергосистеми."
+>
+<div class="test-page">
+    <EnergyStoreDemo client:load />
+    <EnergyStoreVueDemo client:load />
+    <EnergyStoreSvelteDemo client:load />
+  </div>
+</Layout>
+
+<style>
+  .test-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+</style>
