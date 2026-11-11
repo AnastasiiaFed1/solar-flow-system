@@ -1,0 +1,89 @@
+
+---
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+  technology: string;
+}
+
+const { icon, title, description, technology } = Astro.props;
+---
+
+<section class="module-page">
+  <div class="module-heading">
+    <span class="module-icon" aria-hidden="true">{icon}</span>
+    <h1>{title}</h1>
+    <p>{description}</p>
+  </div>
+
+  <div class="module-placeholder">
+    <span class="placeholder-icon" aria-hidden="true">⚙️</span>
+    <h2>Модуль у розробці</h2>
+    <p>
+      Тут буде розміщено інтерактивний модуль,
+      реалізований на {technology}.
+    </p>
+  </div>
+</section>
+
+<style>
+  .module-page {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 70px 24px 100px;
+  }
+
+  .module-heading {
+    margin-bottom: 45px;
+  }
+
+  .module-icon {
+    font-size: 36px;
+  }
+
+  .module-heading h1 {
+    margin: 18px 0;
+    color: var(--color-text);
+    font-size: 36px;
+  }
+
+  .module-heading p {
+    max-width: 700px;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .module-placeholder {
+    padding: 70px 24px;
+    border: 2px dashed var(--color-border);
+    border-radius: 16px;
+    background: #f8faf9;
+    text-align: center;
+  }
+
+  .placeholder-icon {
+    font-size: 42px;
+  }
+
+  .module-placeholder h2 {
+    margin: 18px 0 12px;
+    color: var(--color-text);
+  }
+
+  .module-placeholder p {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .module-page {
+      padding: 40px 20px 70px;
+    }
+
+    .module-heading h1 {
+      font-size: 28px;
+    }
+  }
+</style>

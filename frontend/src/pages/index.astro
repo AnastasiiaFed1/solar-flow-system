@@ -1,11 +1,281 @@
+
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+  title="SolarFlow — Головна"
+  description="SolarFlow — платформа для проєктування, моніторингу та моделювання сонячних електростанцій."
+>
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-label">☀️ Розумна сонячна енергетика</span>
+
+      <h1>Керуйте сонячною енергією разом із SolarFlow</h1>
+
+      <p>
+        Єдина платформа для проєктування, моніторингу та
+        моделювання сонячних електростанцій.
+        Досліджуйте можливості відновлюваної енергетики
+        за допомогою сучасних цифрових інструментів.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/service" class="button button-primary">
+          Перейти до сервісу
+        </a>
+
+        <a href="/features" class="button button-secondary">
+          Дізнатися більше
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="sun">☀️</div>
+      <div class="solar-panel">
+        <div class="panel-grid">
+          {Array.from({ length: 12 }, () => <span></span>)}
+        </div>
+      </div>
+      <div class="visual-caption">
+        Енергія майбутнього — вже сьогодні
+      </div>
+    </div>
+  </section>
+
+  <section class="intro">
+    <div class="section-heading">
+      <h2>Можливості SolarFlow</h2>
+      <p>
+        Інструменти для аналізу, керування та ефективного
+        використання сонячної енергії.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <article class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Моніторинг</h3>
+        <p>
+          Відстежуйте показники роботи сонячної
+          електростанції у зручному інтерфейсі.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Моделювання</h3>
+        <p>
+          Досліджуйте виробництво та споживання
+          електроенергії за різних умов.
+        </p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">🌱</div>
+        <h3>Оптимізація</h3>
+        <p>
+          Аналізуйте енергетичні сценарії для
+          ефективнішого використання ресурсів.
+        </p>
+      </article>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .hero {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 96px 24px;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 64px;
+  }
+
+  .hero-label {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .hero h1 {
+    margin: 0;
+    max-width: 650px;
+    color: var(--color-text);
+    font-size: clamp(34px, 4vw, 54px);
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+  }
+
+  .hero-content > p {
+    max-width: 570px;
+    margin: 24px 0 32px;
+    color: var(--color-muted);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .button:hover {
+    transform: translateY(-2px);
+  }
+
+  .button-primary {
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+
+  .button-primary:hover {
+    background: #166534;
+  }
+
+  .button-secondary {
+    background: #f0fdf4;
+    color: var(--color-primary);
+    border: 1px solid #bbf7d0;
+  }
+
+  .hero-visual {
+    min-height: 350px;
+    padding: 36px;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .sun {
+    font-size: 70px;
+  }
+
+  .solar-panel {
+    width: min(100%, 290px);
+    padding: 12px;
+    background: #1e3a5f;
+    border: 5px solid #334155;
+    border-radius: 8px;
+    transform: perspective(500px) rotateX(15deg);
+    box-shadow: 0 15px 24px #00000020;
+  }
+
+  .panel-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+
+  .panel-grid span {
+    height: 40px;
+    background: linear-gradient(135deg, #2563eb, #0f172a);
+    border: 1px solid #60a5fa;
+    border-radius: 2px;
+  }
+
+  .visual-caption {
+    color: #166534;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .intro {
+    padding: 80px 24px 100px;
+    background: #f8faf9;
+  }
+
+  .section-heading {
+    max-width: 700px;
+    margin: 0 auto 44px;
+    text-align: center;
+  }
+
+  .section-heading h2 {
+    margin: 0 0 16px;
+    color: var(--color-text);
+    font-size: 34px;
+  }
+
+  .section-heading p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .features-grid {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .feature-card {
+    padding: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: var(--color-surface);
+  }
+
+  .feature-icon {
+    margin-bottom: 18px;
+    font-size: 34px;
+  }
+
+  .feature-card h3 {
+    margin: 0 0 12px;
+    color: var(--color-text);
+    font-size: 21px;
+  }
+
+  .feature-card p {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 800px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 60px 24px;
+      gap: 40px;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .intro {
+      padding: 60px 24px;
+    }
+
+    .section-heading h2 {
+      font-size: 28px;
+    }
+  }
+</style>
