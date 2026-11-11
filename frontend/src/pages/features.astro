@@ -1,0 +1,146 @@
+
+---
+import Layout from '../layouts/Layout.astro';
+
+
+const features = [
+  {
+    icon: '📊',
+    title: 'Dashboard',
+    description: 'Моніторинг виробництва та споживання електроенергії, стану обладнання й потоків енергії.',
+    href: '/dashboard',
+  },
+  {
+    icon: '☀️',
+    title: 'Конфігуратор СЕС',
+    description: 'Налаштування сонячних панелей, акумуляторів та інших компонентів енергосистеми.',
+    href: '/configurator',
+  },
+  {
+    icon: '🔌',
+    title: 'Smart Grid',
+    description: 'Керування підключеними пристроями та аналіз їхнього енергоспоживання.',
+    href: '/smart-grid',
+  },
+  {
+    icon: '💰',
+    title: 'Фінанси та екологія',
+    description: 'Оцінювання економічної ефективності та екологічних показників сонячної електростанції.',
+    href: '/finance',
+  },
+  {
+    icon: '🌤️',
+    title: 'Симуляція та 3D',
+    description: 'Моделювання погодних умов і тривимірна візуалізація роботи сонячних панелей.',
+    href: '/simulation',
+  },
+];
+---
+
+<Layout
+  title="Можливості — SolarFlow"
+  description="Дізнайтеся про основні можливості платформи SolarFlow."
+>
+  <section class="features-page">
+
+
+    <h1 class="visually-hidden">Можливості SolarFlow</h1>
+
+
+    
+ <div class="features-grid">
+    {features.map((feature) => (
+      <a href={feature.href} class="feature-card">
+        <div class="feature-icon">{feature.icon}</div>
+        <h2>{feature.title}</h2>
+        <p>{feature.description}</p>
+      </a>
+    ))}
+  </div>
+  
+
+  </section>
+</Layout>
+
+<style>
+  .features-page {
+    padding: 48px 24px 80px;
+  }
+
+
+  .features-grid {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .feature-card {
+    padding: 34px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: block;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px #0000000c;
+  }
+
+  .feature-card:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  }
+
+  .feature-icon {
+    margin-bottom: 22px;
+    font-size: 36px;
+  }
+
+  .feature-card h2 {
+    margin: 0 0 14px;
+    color: var(--color-text);
+    font-size: 21px;
+  }
+
+  .feature-card p {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+
+  @media (max-width: 900px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .features-page {
+      padding: 55px 20px 70px;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+</style>

@@ -1,0 +1,109 @@
+
+---
+import Layout from '../layouts/Layout.astro';
+
+const services = [
+  {
+    icon: '📖',
+    title: 'Інструкції',
+    description: 'Посібники з використання функцій SolarFlow.',
+  },
+  {
+    icon: '❓',
+    title: 'Центр допомоги',
+    description: 'Відповіді на запитання та допомога користувачам.',
+  },
+  {
+    icon: '🔄',
+    title: 'Оновлення системи',
+    description: 'Інформація про оновлення та нові можливості.',
+  },
+  {
+    icon: '💬',
+    title: "Зворотний зв'язок",
+    description: 'Запитання, відгуки та пропозиції.',
+  },
+];
+---
+
+<Layout
+  title="Сервіс — SolarFlow"
+  description="Інструкції, підтримка та інформація про SolarFlow."
+>
+  <section class="service-page">
+    <h1 class="visually-hidden">Сервіс SolarFlow</h1>
+
+    <div class="service-grid">
+      {services.map((service) => (
+        <article class="service-card">
+          <div class="service-icon" aria-hidden="true">
+            {service.icon}
+          </div>
+
+          <h2>{service.title}</h2>
+          <p>{service.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .service-page {
+    padding: 48px 24px 80px;
+  }
+
+  .service-grid {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .service-card {
+    padding: 34px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+  }
+
+  .service-icon {
+    margin-bottom: 22px;
+    font-size: 36px;
+  }
+
+  .service-card h2 {
+    margin: 0 0 14px;
+    color: var(--color-text);
+    font-size: 22px;
+  }
+
+  .service-card p {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 600px) {
+    .service-page {
+      padding: 32px 20px 60px;
+    }
+
+    .service-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
