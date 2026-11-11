@@ -1,0 +1,60 @@
+
+---
+const navigation = [
+  { name: 'Головна', href: '/' },
+  { name: 'Можливості', href: '/features' },
+  { name: 'Сервіс', href: '/service' },
+];
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string) {
+  return href === '/'
+    ? currentPath === '/'
+    : currentPath === href ||
+        currentPath.startsWith(`${href}/`);
+}
+---
+
+<nav class="navigation" aria-label="Основна навігація">
+  {navigation.map((item) => (
+    <a
+      href={item.href}
+      class:list={['nav-link', { active: isActive(item.href) }]}
+      aria-current={isActive(item.href) ? 'page' : undefined}
+    >
+      {item.name}
+    </a>
+  ))}
+</nav>
+
+<style>
+  .navigation {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .nav-link {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 700px) {
+    .navigation {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  }
+</style>

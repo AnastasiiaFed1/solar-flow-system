@@ -1,0 +1,72 @@
+---
+import Navigation from './Navigation.astro';
+---
+
+<header class="site-header">
+  <div class="header-container">
+    <a href="/" class="logo" aria-label="SolarFlow — головна">
+      <span class="sun-icon">☀️</span>
+      <span>SolarFlow</span>
+    </a>
+
+    <Navigation />
+
+    <div class="header-actions">
+      <span class="user-icon" title="Профіль користувача">
+        👤
+      </span>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    width: 100%;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header-container {
+    max-width: 1200px;
+    min-height: 72px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .sun-icon {
+    font-size: 25px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .user-icon {
+    font-size: 22px;
+  }
+
+  @media (max-width: 700px) {
+    .header-container {
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 16px;
+    }
+
+  }
+</style>
