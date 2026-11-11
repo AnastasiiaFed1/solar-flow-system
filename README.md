@@ -1,5 +1,54 @@
 # solar-flow-system
 
+## Frontend
+
+Frontend SolarFlow розроблено на Astro з підтримкою інтерактивних компонентів React, Vue та Svelte.
+
+Для обміну станом між компонентами використовується Nano Stores, а для взаємодії з backend — REST API Client.
+
+### Локальний запуск
+
+Перейдіть у директорію frontend та встановіть залежності:
+
+```powershell
+cd frontend
+npm install
+```
+
+Запустіть сервер розробки:
+
+```powershell
+npm run dev
+```
+
+За стандартних налаштувань застосунок буде доступний за адресою `http://localhost:4321`.
+
+### Перевірка та тестування
+
+Команди виконуються з директорії `frontend`:
+
+```powershell
+npx astro check
+npm test
+npm run build
+```
+
+### Налаштування API
+
+Для підключення до локального backend створіть файл `frontend/.env`:
+
+```env
+PUBLIC_API_URL=http://localhost:5106
+```
+
+Адреса API повинна відповідати порту, на якому запущено backend. Для роботи запитів із браузера backend має дозволяти відповідне джерело через CORS.
+
+Детальний опис архітектури, структури frontend, маршрутизації, Nano Stores, REST API та інтеграції командних модулів наведено в [документації frontend](docs/frontend.md).
+
+---
+
+
+
 ## Backend prerequisites
 
 - .NET SDK 9 or a newer SDK capable of targeting net9.0.
