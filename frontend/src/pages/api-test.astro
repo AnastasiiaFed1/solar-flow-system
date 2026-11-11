@@ -1,0 +1,62 @@
+
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Тест REST API — SolarFlow">
+  <section class="api-test">
+    <h1>Тест REST API</h1>
+
+    <button id="load-appliances" type="button">
+      Завантажити прилади
+    </button>
+
+    <pre id="api-result">Натисни кнопку для перевірки API.</pre>
+  </section>
+</Layout>
+
+<script>
+  import { getAppliances } from '../lib/applianceApi';
+
+  const button = document.querySelector<HTMLButtonElement>('#load-appliances');
+  const result = document.querySelector<HTMLElement>('#api-result');
+
+  button?.addEventListener('click', async () => {
+    if (!result) return;
+
+    result.textContent = 'Завантаження...';
+
+    try {
+      const appliances = await getAppliances();
+
+      result.textContent = appliances.length === 0
+        ? 'API працює! Список приладів порожній.'
+        : JSON.stringify(appliances, null, 2);
+    } catch (error) {
+      result.textContent =
+        error instanceof Error ? `Помилка: ${error.message}` : 'Невідома помилка';
+    }
+  });
+</script>
+
+<style>
+  .api-test {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 24px;
+  }
+
+  button {
+    padding: 12px 20px;
+    cursor: pointer;
+  }
+
+  pre {
+    margin-top: 24px;
+    padding: 20px;
+    background: #f8faf9;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    white-space: pre-wrap;
+  }
+</style>
