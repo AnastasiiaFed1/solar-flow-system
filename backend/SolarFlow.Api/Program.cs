@@ -10,6 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(); // Додаємо підтримку контролерів
 builder.Services.AddOpenApi();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SolarFlowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4321")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+
 // Select provider and validate database configuration before startup.
 builder.Services.AddSolarDatabase(builder.Configuration);
 
@@ -34,9 +45,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseCors("SolarFlowFrontend");
 
 // Мапінг маршрутів для контролерів ([ApiController])
 app.MapControllers();
+
 
 app.Run();
