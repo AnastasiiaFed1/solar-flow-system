@@ -9,3 +9,16 @@ import SimulationCore from '../components/svelte/SimulationCore.svelte';
 >
   <SimulationCore client:load />
 </Layout>
+
+<style is:global>
+  body:has(#simulation-title) {
+    --color-primary: #68efe9;
+    --color-background: #131f2c;
+    --color-surface: #172636;
+    --color-text: #e3edf7;
+    --color-muted: #a4b9cc;
+    --color-border: #30485c;
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+</style>
