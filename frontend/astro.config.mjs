@@ -9,8 +9,8 @@ import svelte from '@astrojs/svelte';
 export default defineConfig({
   integrations: [
     react({
-      include: ['**/components/react/**'],
-      exclude: ['**/*.vue', '**/*.svelte'],
+        include: ['**/components/react/*.{jsx,tsx}', '**/components/react/**/*.{jsx,tsx}'],
+        exclude: ['**/*.vue', '**/*.vue?*', '**/*.svelte', '**/*.svelte?*'],
     }),
     vue(),
     svelte(),
