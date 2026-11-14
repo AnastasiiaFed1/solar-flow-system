@@ -1,6 +1,5 @@
 
-const API_BASE_URL = import.meta.env.PUBLIC_API_URL;
-
+const API_BASE_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5106';
 export class ApiError extends Error {
   constructor(
     public status: number,
