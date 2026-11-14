@@ -7,8 +7,8 @@ describe('REST API Client', () => {
     vi.unstubAllGlobals();
   });
 
-  it('повертає JSON із відповіді сервера', async () => {
-    const data = [{ id: 1, name: 'Холодильник' }];
+  it('РїРѕРІРµСЂС‚Р°С” JSON С–Р· РІС–РґРїРѕРІС–РґС– СЃРµСЂРІРµСЂР°', async () => {
+    const data = [{ id: 1, name: 'РҐРѕР»РѕРґРёР»СЊРЅРёРє' }];
 
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
@@ -24,7 +24,7 @@ describe('REST API Client', () => {
     expect(fetchMock).toHaveBeenCalledOnce();
   });
 
-  it('обробляє HTTP-помилку 404', async () => {
+  it('РѕР±СЂРѕР±Р»СЏС” HTTP-РїРѕРјРёР»РєСѓ 404', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -38,7 +38,7 @@ describe('REST API Client', () => {
     ).rejects.toBeInstanceOf(ApiError);
   });
 
-  it('обробляє відповідь 204 No Content', async () => {
+  it('РѕР±СЂРѕР±Р»СЏС” РІС–РґРїРѕРІС–РґСЊ 204 No Content', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -54,7 +54,7 @@ describe('REST API Client', () => {
     expect(result).toBeUndefined();
   });
 
-  it('обробляє недоступність сервера', async () => {
+  it('РѕР±СЂРѕР±Р»СЏС” РЅРµРґРѕСЃС‚СѓРїРЅС–СЃС‚СЊ СЃРµСЂРІРµСЂР°', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockRejectedValue(new TypeError('Failed to fetch'))
@@ -62,6 +62,6 @@ describe('REST API Client', () => {
 
     await expect(
       apiRequest('/api/Appliances')
-    ).rejects.toThrow('Не вдалося підключитися до сервера');
+    ).rejects.toThrow('РќРµ РІРґР°Р»РѕСЃСЏ РїС–РґРєР»СЋС‡РёС‚РёСЃСЏ РґРѕ СЃРµСЂРІРµСЂР°');
   });
 });

@@ -28,7 +28,7 @@ export function calculateAutonomy({
 
     let status: 'charging' | 'discharging' | 'balanced' = 'balanced';
     let hoursRemaining = Infinity;
-    let formattedTime = 'Баланс';
+    let formattedTime = 'Р‘Р°Р»Р°РЅСЃ';
 
     if (deltaPowerKW > 0.05) {
         status = 'charging';
@@ -36,22 +36,22 @@ export function calculateAutonomy({
         hoursRemaining = neededEnergy / deltaPowerKW;
         const hrs = Math.floor(hoursRemaining);
         const mins = Math.round((hoursRemaining - hrs) * 60);
-        formattedTime = `Заряд: ~${hrs}г ${mins}хв`;
+        formattedTime = `Р—Р°СЂСЏРґ: ~${hrs}Рі ${mins}С…РІ`;
     } else if (deltaPowerKW < -0.05) {
         status = 'discharging';
         const deficitKW = Math.abs(deltaPowerKW);
         hoursRemaining = remainingEnergyKWh / deficitKW;
 
         if (hoursRemaining <= 0 || Number.isNaN(hoursRemaining)) {
-            formattedTime = '0 год 00 хв (Розряджено)';
+            formattedTime = '0 РіРѕРґ 00 С…РІ (Р РѕР·СЂСЏРґР¶РµРЅРѕ)';
         } else {
             const hrs = Math.floor(hoursRemaining);
             const mins = Math.round((hoursRemaining - hrs) * 60);
-            formattedTime = `${hrs} год ${mins} хв`;
+            formattedTime = `${hrs} РіРѕРґ ${mins} С…РІ`;
         }
     } else {
         status = 'balanced';
-        formattedTime = 'Автономно (Баланс 0 kW)';
+        formattedTime = 'РђРІС‚РѕРЅРѕРјРЅРѕ (Р‘Р°Р»Р°РЅСЃ 0 kW)';
     }
 
     return {

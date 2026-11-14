@@ -13,7 +13,7 @@ describe('Energy Store', () => {
     resetEnergySystem();
   });
 
-  it('має початковий стан offline', () => {
+  it('РјР°С” РїРѕС‡Р°С‚РєРѕРІРёР№ СЃС‚Р°РЅ offline', () => {
     const state = $energySystem.get();
 
     expect(state.status).toBe('offline');
@@ -21,7 +21,7 @@ describe('Energy Store', () => {
     expect(state.metrics.batteryLevel).toBe(0);
   });
 
-  it('оновлює показники енергосистеми', () => {
+  it('РѕРЅРѕРІР»СЋС” РїРѕРєР°Р·РЅРёРєРё РµРЅРµСЂРіРѕСЃРёСЃС‚РµРјРё', () => {
     updateEnergyMetrics({
       solarPower: 4.5,
       consumptionPower: 2.1,
@@ -37,13 +37,13 @@ describe('Energy Store', () => {
     expect(state.metrics.lastUpdated).not.toBe('');
   });
 
-  it('змінює статус системи', () => {
+  it('Р·РјС–РЅСЋС” СЃС‚Р°С‚СѓСЃ СЃРёСЃС‚РµРјРё', () => {
     updateSystemStatus('online');
 
     expect($energySystem.get().status).toBe('online');
   });
 
-  it('скидає стан до початкових значень', () => {
+  it('СЃРєРёРґР°С” СЃС‚Р°РЅ РґРѕ РїРѕС‡Р°С‚РєРѕРІРёС… Р·РЅР°С‡РµРЅСЊ', () => {
     updateEnergyMetrics({
       solarPower: 5,
       batteryLevel: 90,

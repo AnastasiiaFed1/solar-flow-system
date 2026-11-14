@@ -1,17 +1,16 @@
-
 ---
-import Layout from '../layouts/Layout.astro';
-import ModulePlaceholder from '../components/shared/ModulePlaceholder.astro';
+import '../styles/tailwind.css';
+import { Dashboard } from '../components/react/Dashboard';
 ---
 
-<Layout
-  title="Dashboard — SolarFlow"
-  description="Моніторинг сонячної електростанції та енергетичних показників."
->
-  <ModulePlaceholder
-    icon="📊"
-    title="Енергетичний Dashboard"
-    description="Моніторинг виробництва та споживання електроенергії, стану обладнання й потоків енергії."
-    technology="React"
-  />
-</Layout>
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SolarFlow / Smart Grid System</title>
+  </head>
+  <body class="bg-[#0c141f] m-0 p-0">
+    <Dashboard client:only="react" />
+  </body>
+</html>
