@@ -23,19 +23,19 @@ export default function EnergyStoreDemo() {
 
   return (
     <section>
-      <h2>Тест Nano Stores</h2>
+      <h2>РўРµСЃС‚ Nano Stores</h2>
 
-      <p>Статус: {system.status}</p>
-      <p>Генерація: {system.metrics.solarPower} кВт</p>
-      <p>Споживання: {system.metrics.consumptionPower} кВт</p>
-      <p>Акумулятор: {system.metrics.batteryLevel}%</p>
+      <p>РЎС‚Р°С‚СѓСЃ: {system.status}</p>
+      <p>Р“РµРЅРµСЂР°С†С–СЏ: {system.metrics.solarPower} РєР’С‚</p>
+      <p>РЎРїРѕР¶РёРІР°РЅРЅСЏ: {system.metrics.consumptionPower} РєР’С‚</p>
+      <p>РђРєСѓРјСѓР»СЏС‚РѕСЂ: {system.metrics.batteryLevel}%</p>
 
       <button type="button" onClick={updateDemoData}>
-        Оновити тестові дані
+        РћРЅРѕРІРёС‚Рё С‚РµСЃС‚РѕРІС– РґР°РЅС–
       </button>
 
       <button type="button" onClick={resetEnergySystem}>
-        Скинути
+        РЎРєРёРЅСѓС‚Рё
       </button>
     </section>
   );

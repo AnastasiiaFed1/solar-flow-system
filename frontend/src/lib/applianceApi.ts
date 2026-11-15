@@ -10,7 +10,7 @@ import type {
 
 const ENDPOINT = '/api/Appliances';
 
-// Отримати всі прилади з необов'язковими фільтрами
+// РћС‚СЂРёРјР°С‚Рё РІСЃС– РїСЂРёР»Р°РґРё Р· РЅРµРѕР±РѕРІ'СЏР·РєРѕРІРёРјРё С„С–Р»СЊС‚СЂР°РјРё
 export function getAppliances(
   filters: ApplianceFilters = {}
 ): Promise<Appliance[]> {
@@ -34,12 +34,12 @@ export function getAppliances(
   return apiRequest<Appliance[]>(url);
 }
 
-// Отримати прилад за ID
+// РћС‚СЂРёРјР°С‚Рё РїСЂРёР»Р°Рґ Р·Р° ID
 export function getApplianceById(id: number): Promise<Appliance> {
   return apiRequest<Appliance>(`${ENDPOINT}/${id}`);
 }
 
-// Створити новий прилад
+// РЎС‚РІРѕСЂРёС‚Рё РЅРѕРІРёР№ РїСЂРёР»Р°Рґ
 export function createAppliance(
   data: CreateAppliance
 ): Promise<Appliance> {
@@ -49,7 +49,7 @@ export function createAppliance(
   });
 }
 
-// Оновити наявний прилад
+// РћРЅРѕРІРёС‚Рё РЅР°СЏРІРЅРёР№ РїСЂРёР»Р°Рґ
 export function updateAppliance(
   id: number,
   data: UpdateAppliance
@@ -60,7 +60,7 @@ export function updateAppliance(
   });
 }
 
-// Видалити прилад
+// Р’РёРґР°Р»РёС‚Рё РїСЂРёР»Р°Рґ
 export function deleteAppliance(id: number): Promise<void> {
   return apiRequest<void>(`${ENDPOINT}/${id}`, {
     method: 'DELETE',
