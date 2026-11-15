@@ -1,17 +1,8 @@
-
 ---
 import Layout from '../layouts/Layout.astro';
-import ModulePlaceholder from '../components/shared/ModulePlaceholder.astro';
+import SolarConfigurator from '../components/vue/SolarConfigurator.vue';
 ---
 
-<Layout
-  title="Конфігуратор СЕС — SolarFlow"
-  description="Налаштування компонентів сонячної електростанції."
->
-  <ModulePlaceholder
-    icon="☀️"
-    title="Конфігуратор СЕС"
-    description="Налаштування сонячних панелей, акумуляторів та інших компонентів енергосистеми."
-    technology="Vue"
-  />
+<Layout title="SolarFlow — Конфігуратор СЕС">
+  <SolarConfigurator client:load />
 </Layout>
