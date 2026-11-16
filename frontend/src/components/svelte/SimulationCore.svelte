@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ComparisonChart from "./ComparisonChart.svelte";
+  import EnergyAnalytics from "./EnergyAnalytics.svelte";
   import { dailySolarProfile, solarPowerAt, type SolarSettings } from '../../lib/calculations/solar';
 
   let capacityKw = $state(5);
@@ -7,9 +9,14 @@
   let hour = $state(12);
   let weather = $state<SolarSettings['weather']>('clear');
 
+  let baseline = $state<SolarSettings | null>(null);
+
   const settings = $derived({ capacityKw, tilt, azimuth, weather });
   const profile = $derived(dailySolarProfile(settings));
   const dailyEnergy = $derived(profile.reduce((total, point) => total + point.powerKw, 0));
+  const baselineProfile = $derived(baseline ? dailySolarProfile(baseline) : null);
+  const baselineEnergy = $derived(baselineProfile?.reduce((total, point) => total + point.powerKw, 0) ?? 0);
+  const scale = $derived(Math.max(capacityKw, baseline?.capacityKw ?? 0));
   const power = $derived(solarPowerAt(hour, settings));
   const format = new Intl.NumberFormat('uk-UA', { maximumFractionDigits: 2 });
   const time = (value: number) => `${String(value).padStart(2, '0')}:00`;
@@ -59,15 +66,20 @@
         <div><span>Енергія за добу</span><strong>{format.format(dailyEnergy)} кВт·год</strong></div>
       </div>
       <h2>Генерація за годинами</h2>
-      <div class="chart" aria-label="Середня потужність за кожну годину">
-        {#each profile as point (point.hour)}
-          <div class="column" class:active={point.hour === hour}
-            title={`${time(point.hour)} — ${format.format(point.powerKw)} кВт`}>
-            <div class="bar" style:height={`${(point.powerKw / capacityKw) * 100}%`}></div>
-          </div>
-        {/each}
+      <div class="comparison-actions">
+        <button type="button" onclick={() => baseline = { ...settings }}>
+          {baseline ? 'Оновити сценарій A' : 'Зберегти як сценарій A'}
+        </button>
+        {#if baseline}
+          <button type="button" class="secondary" onclick={() => baseline = null}>Скинути порівняння</button>
+        {/if}
       </div>
-      <div class="axis"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
+      {#if baseline}
+        <EnergyAnalytics {baseline} energyA={baselineEnergy} energyB={dailyEnergy} />
+      {:else}
+        <p class="muted note comparison-help">Збережи сценарій A, а потім зміни налаштування для сценарію B.</p>
+      {/if}
+      <ComparisonChart current={profile} baseline={baselineProfile} {hour} {scale} />
       <p class="muted note">Оцінка для умовного дня зі сходом о 06:00 і заходом о 18:00.</p>
     </div>
   </div>
@@ -105,13 +117,11 @@
   .metrics span, .metrics strong { display: block; }
   .metrics span { font-size: .78rem; color: #94a3b8; }
   .metrics strong { font-size: clamp(1.25rem, 3vw, 1.875rem); font-weight: 800; letter-spacing: -.025em; filter: drop-shadow(0 0 8px rgb(34 211 238 / 30%)); }
-  .chart { display: grid; grid-template-columns: repeat(24, minmax(0, 1fr)); gap: 3px; height: 6rem;
-    border-bottom: 1px solid #48657b; background: repeating-linear-gradient(to top, transparent 0 calc(25% - 1px), #2a4155 calc(25% - 1px) 25%); }
-  .column { display: flex; align-items: end; min-width: 0; }
-  .column.active { background: #38e7dd20; }
-  .bar { width: 100%; background: linear-gradient(to top, #06b6d4, #5eead4); transition: height 500ms ease; border-radius: .15rem .15rem 0 0; }
-  .active .bar { background: #5eead4; box-shadow: 0 0 9px #5effed80; }
-  .axis { display: flex; justify-content: space-between; font-size: .7rem; color: #94a3b8; padding-top: .3rem; }
+  .comparison-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .comparison-actions button { background: #164452; color: #cffafe; border: 1px solid #327079; border-radius: .5rem; padding: .4rem .65rem; font: inherit; font-size: .8rem; cursor: pointer; }
+  .comparison-actions .secondary { background: #0d1520; }
+  .comparison-actions button:hover, .comparison-actions button:focus-visible { outline: 2px solid #22d3ee; outline-offset: 2px; }
+  .comparison-help { margin-bottom: .65rem; }
   @media (max-width: 680px) { .workspace { grid-template-columns: 1fr; } }
   .title-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
   h1 span { color: #22d3ee; }
@@ -123,5 +133,5 @@
   input[type='range'] { appearance: none; height: .625rem; border-radius: 999px; border: 1px solid rgb(6 182 212 / 20%); background: linear-gradient(to right, #06b6d4, #5eead4) left / var(--progress) 100% no-repeat #0d1520; cursor: pointer; }
   input[type='range']::-webkit-slider-thumb { appearance: none; width: 1rem; height: 1rem; border-radius: 50%; border: 2px solid #0d1520; background: #22d3ee; box-shadow: 0 0 8px rgb(34 211 238 / 35%); }
   input[type='range']::-moz-range-thumb { width: .75rem; height: .75rem; border-radius: 50%; border: 2px solid #0d1520; background: #22d3ee; box-shadow: 0 0 8px rgb(34 211 238 / 35%); }
-  @media (prefers-reduced-motion: reduce) { .status::before { animation: none; } .bar { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .status::before { animation: none; } }
 </style>
