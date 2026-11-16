@@ -1,4 +1,5 @@
 <script lang="ts">
+  import SolarPanel3D from "./SolarPanel3D.svelte";
   import ComparisonChart from "./ComparisonChart.svelte";
   import EnergyAnalytics from "./EnergyAnalytics.svelte";
   import { dailySolarProfile, solarPowerAt, type SolarSettings } from '../../lib/calculations/solar';
@@ -59,8 +60,8 @@
       <div class="scene">
         <img src="/solar-station.png" alt="Будинок із сонячними панелями, інвертором та акумулятором" width="1200" height="800" />
         <div class="angles"><span>Нахил <strong>{tilt}°</strong></span><span>Азимут <strong>{azimuth}°</strong></span></div>
-        <div class="orientation" aria-hidden="true"><div class="panel" style:--tilt={tilt + "deg"} style:--azimuth={(azimuth - 180) + "deg"}></div></div>
       </div>
+      <SolarPanel3D {tilt} {azimuth} />
       <div class="metrics" aria-live="polite">
         <div><span>Потужність о {time(hour)}</span><strong>{format.format(power)} кВт</strong></div>
         <div><span>Енергія за добу</span><strong>{format.format(dailyEnergy)} кВт·год</strong></div>
@@ -107,11 +108,6 @@
   .scene img { display: block; width: 100%; height: auto; aspect-ratio: 1.85; object-fit: cover; }
   .angles { position: absolute; top: .65rem; left: .65rem; display: flex; flex-wrap: wrap; gap: .4rem; }
   .angles span { padding: .2rem .45rem; border: 1px solid #327079; border-radius: .3rem; background: #081825ed; font-size: .75rem; }
-  .orientation { position: absolute; bottom: .65rem; right: .65rem; display: grid; place-items: center; width: 5.5rem; height: 4rem; perspective: 200px; background: #081825ed; border: 1px solid #327079; border-radius: .35rem; }
-  .panel { width: 3.6rem; height: 2.3rem; border: 2px solid #71e4ef; border-radius: .15rem;
-    background: repeating-linear-gradient(90deg, transparent 0 23%, #6db7dc 24% 25%),
-      repeating-linear-gradient(0deg, #153e75 0 31%, #6db7dc 32% 33.3%);
-    box-shadow: 0 0 12px #49d8f477; transform: rotateX(35deg) rotateZ(var(--azimuth)) rotateX(var(--tilt)); }
   .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: .85rem 0 1rem; }
   .metrics div { min-width: 0; padding: .55rem .65rem; background: #0d1520; border: 1px solid #2d5368; border-radius: .4rem; }
   .metrics span, .metrics strong { display: block; }
