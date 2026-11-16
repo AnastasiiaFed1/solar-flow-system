@@ -1,15 +1,14 @@
 ﻿<script setup>
     import { ref, computed, onMounted } from 'vue';
     import { useStore } from '@nanostores/vue';
-    import * as energyStoreModule from '../../stores/energyStore';
+    import { $energyState } from '../../stores/energyStore';
     import ApplianceCard from './ApplianceCard.vue';
     import AutomationRules from './AutomationRules.vue';
     import LoadDiagram from './LoadDiagram.vue';
 
     const API_BASE_URL = 'http://localhost:5106/api/appliances';
 
-    const storeAtom = energyStoreModule.$energySystem || energyStoreModule.energyStore || energyStoreModule.default;
-    const system = storeAtom ? useStore(storeAtom) : ref(null);
+    const system = useStore($energyState);
 
     const appliances = ref([]);
     const isLoading = ref(false);
@@ -29,9 +28,9 @@
         solarStationId: 1,
     });
 
-    const activeStationId = computed(() => system.value?.stationId ?? 1);
-    const currentBatteryLevel = computed(() => system.value?.metrics?.batteryLevel ?? 85);
-    const solarGenerationWatts = computed(() => (system.value?.metrics?.solarPower ?? 3.5) * 1000);
+    const activeStationId = computed(() => 1);
+    const currentBatteryLevel = computed(() => system.value.batterySoC);
+    const solarGenerationWatts = computed(() => system.value.solarPowerKW * 1000);
 
     const isAutoTriggered = computed(
         () => isAutomationActive.value && currentBatteryLevel.value >= batteryThreshold.value

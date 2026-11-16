@@ -1,18 +1,20 @@
+
 <script setup>
 import { useStore } from '@nanostores/vue';
-import { $energySystem } from '../../stores/energyStore';
+import { $energyState } from '../../stores/energyStore';
 
-const system = useStore($energySystem);
+const system = useStore($energyState);
 </script>
 
 <template>
   <section class="vue-demo">
     <h2>Vue — спільний стан</h2>
 
-    <p>Статус: {{ system.status }}</p>
-    <p>Генерація: {{ system.metrics.solarPower }} кВт</p>
-    <p>Споживання: {{ system.metrics.consumptionPower }} кВт</p>
-    <p>Акумулятор: {{ system.metrics.batteryLevel }}%</p>
+    <p>Генерація: {{ system.solarPowerKW }} кВт</p>
+    <p>Споживання: {{ system.homeConsumptionKW }} кВт</p>
+    <p>Акумулятор: {{ system.batterySoC }}%</p>
+    <p>Імпорт із мережі: {{ system.gridImportKW }} кВт</p>
+    <p>Експорт у мережу: {{ system.gridExportKW }} кВт</p>
   </section>
 </template>
 

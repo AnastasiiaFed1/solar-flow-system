@@ -31,10 +31,10 @@ export async function syncEnergyFromBackend() {
 
         const activeAppliances: Array<Record<string, any>> = await response.json();
 
-        // Підтримуємо різні варіанти назви поля потужності в ApplianceDto
+        // РџС–РґС‚СЂРёРјСѓС”РјРѕ СЂС–Р·РЅС– РІР°СЂС–Р°РЅС‚Рё РЅР°Р·РІРё РїРѕР»СЏ РїРѕС‚СѓР¶РЅРѕСЃС‚С– РІ ApplianceDto
         const totalConsumptionKW = activeAppliances.reduce((sum, item) => {
             const rawPower = item.powerKw ?? item.powerKW ?? item.power ?? 0;
-            // Якщо потужність у базі в ватах (> 50), переводимо в кВт
+            // РЇРєС‰Рѕ РїРѕС‚СѓР¶РЅС–СЃС‚СЊ Сѓ Р±Р°Р·С– РІ РІР°С‚Р°С… (> 50), РїРµСЂРµРІРѕРґРёРјРѕ РІ РєР’С‚
             const kw = rawPower > 50 ? rawPower / 1000 : rawPower;
             return sum + Number(kw);
         }, 0);
@@ -49,6 +49,6 @@ export async function syncEnergyFromBackend() {
             gridExportKW: netPower > 0 ? netPower : 0,
         });
     } catch (error) {
-        console.warn('Бекенд недоступний, використовуються локальні дані:', error);
+        console.warn('Р‘РµРєРµРЅРґ РЅРµРґРѕСЃС‚СѓРїРЅРёР№, РІРёРєРѕСЂРёСЃС‚РѕРІСѓСЋС‚СЊСЃСЏ Р»РѕРєР°Р»СЊРЅС– РґР°РЅС–:', error);
     }
 }

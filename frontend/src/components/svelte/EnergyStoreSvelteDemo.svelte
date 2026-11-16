@@ -1,14 +1,16 @@
+
 <script lang="ts">
-  import { $energySystem as energySystem } from '../../stores/energyStore';
+  import { $energyState as energyState } from '../../stores/energyStore';
 </script>
 
 <section class="svelte-demo">
   <h2>Svelte — спільний стан</h2>
 
-  <p>Статус: {$energySystem.status}</p>
-  <p>Генерація: {$energySystem.metrics.solarPower} кВт</p>
-  <p>Споживання: {$energySystem.metrics.consumptionPower} кВт</p>
-  <p>Акумулятор: {$energySystem.metrics.batteryLevel}%</p>
+  <p>Генерація: {$energyState.solarPowerKW} кВт</p>
+  <p>Споживання: {$energyState.homeConsumptionKW} кВт</p>
+  <p>Акумулятор: {$energyState.batterySoc}%</p>
+  <p>Імпорт із мережі: {$energyState.gridImportKW} кВт</p>
+  <p>Експорт у мережу: {$energyState.gridExportKW} кВт</p>
 </section>
 
 <style>

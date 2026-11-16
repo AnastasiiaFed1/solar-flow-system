@@ -1,41 +1,43 @@
 
 import { useStore } from '@nanostores/react';
-
-import {
-  $energySystem,
-  updateEnergyMetrics,
-  updateSystemStatus,
-  resetEnergySystem,
-} from '../../stores/energyStore';
+import { $energyState, updateEnergyState } from '../../stores/energyStore';
 
 export default function EnergyStoreDemo() {
-  const system = useStore($energySystem);
+  const system = useStore($energyState);
 
   function updateDemoData() {
-    updateEnergyMetrics({
-      solarPower: 4.5,
-      consumptionPower: 2.1,
-      batteryLevel: 78,
+    updateEnergyState({
+      solarPowerKW: 4.5,
+      homeConsumptionKW: 2.1,
+      batterySoc: 78,
     });
+  }
 
-    updateSystemStatus('online');
+  function resetDemoData() {
+    updateEnergyState({
+      solarPowerKW: 4.8,
+      homeConsumptionKW: 2.7,
+      gridImportKW: 1.2,
+      gridExportKW: 0,
+      batteryPowerKW: 1.2,
+      batterySoc: 68,
+    });
   }
 
   return (
     <section>
-      <h2>РўРµСЃС‚ Nano Stores</h2>
+      <h2>Тест Nano Stores</h2>
 
-      <p>РЎС‚Р°С‚СѓСЃ: {system.status}</p>
-      <p>Р“РµРЅРµСЂР°С†С–СЏ: {system.metrics.solarPower} РєР’С‚</p>
-      <p>РЎРїРѕР¶РёРІР°РЅРЅСЏ: {system.metrics.consumptionPower} РєР’С‚</p>
-      <p>РђРєСѓРјСѓР»СЏС‚РѕСЂ: {system.metrics.batteryLevel}%</p>
+      <p>Генерація: {system.solarPowerKW} кВт</p>
+      <p>Споживання: {system.homeConsumptionKW} кВт</p>
+      <p>Акумулятор: {system.batterySoc}%</p>
 
       <button type="button" onClick={updateDemoData}>
-        РћРЅРѕРІРёС‚Рё С‚РµСЃС‚РѕРІС– РґР°РЅС–
+        Оновити тестові дані
       </button>
 
-      <button type="button" onClick={resetEnergySystem}>
-        РЎРєРёРЅСѓС‚Рё
+      <button type="button" onClick={resetDemoData}>
+        Скинути
       </button>
     </section>
   );
