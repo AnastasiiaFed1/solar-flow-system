@@ -6,3 +6,24 @@ import SolarConfigurator from '../components/vue/SolarConfigurator.vue';
 <Layout title="SolarFlow — Конфігуратор СЕС">
   <SolarConfigurator client:load />
 </Layout>
+
+<style is:global>
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+    background: radial-gradient(circle at 75% 18%, #0f2942 0%, #07131e 55%, #050d15 100%) !important;
+    color: #e2e8f0 !important;
+    overflow-x: hidden;
+  }
+
+  main,
+  .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+</style>
