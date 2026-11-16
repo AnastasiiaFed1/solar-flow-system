@@ -1,4 +1,5 @@
 <script lang="ts">
+  import StationSelector from "./StationSelector.svelte";
   import TimeTravelEngine from "./TimeTravelEngine.svelte";
   import SolarPanel3D from "./SolarPanel3D.svelte";
   import ComparisonChart from "./ComparisonChart.svelte";
@@ -45,6 +46,7 @@
     <div class="controls">
       <div class="card">
       <h2>Налаштування панелей</h2>
+      <StationSelector onSelect={(station) => { tilt = station.tiltAngle; azimuth = station.azimuthAngle; }} />
       <label>Погода
         <select bind:value={weather}>
           <option value="clear">Ясно</option>
@@ -59,10 +61,10 @@
     </div>
       <div class="card"><h2>Орієнтація панелей</h2>
       <label>Нахил <strong>{tilt}°</strong>
-        <input type="range" min="0" max="90" bind:value={tilt} style:--progress={(tilt / 90 * 100) + "%"} />
+        <input type="range" min="0" max="90" step="any" bind:value={tilt} style:--progress={(tilt / 90 * 100) + "%"} />
       </label>
       <label>Азимут <strong>{azimuth}°</strong>
-        <input type="range" min="0" max="359" bind:value={azimuth} style:--progress={(azimuth / 359 * 100) + "%"} />
+        <input type="range" min="0" max="360" step="any" bind:value={azimuth} style:--progress={(azimuth / 360 * 100) + "%"} />
       </label>
       <p class="muted directions">0° — північ, 90° — схід, 180° — південь, 270° — захід.</p></div>
     </div>
