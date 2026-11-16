@@ -1,11 +1,43 @@
 
 :root {
-    --color-primary: #15803d;
-    --color-background: #ffffff;
-    --color-surface: #ffffff;
-    --color-text: #1f2937;
-    --color-muted: #64748b;
-    --color-border: #e5e7eb;
-    --container-width: 1200px;
-  }
-  
+  --color-primary: #15803d;
+  --color-background: #ffffff;
+  --color-surface: #ffffff;
+  --color-text: #1f2937;
+  --color-muted: #64748b;
+  --color-border: #e5e7eb;
+  --container-width: 1200px;
+
+  /* Deep Slate / Cyan-Teal — Astro Shell */
+  --shell-bg-start: #0c141f;
+  --shell-bg-middle: #111c2b;
+  --shell-bg-end: #0e1724;
+
+  --shell-surface: rgba(22, 34, 49, 0.9);
+  --shell-surface-inner: #0d1520;
+
+  --shell-primary: #22d3ee;
+  --shell-primary-soft: #5eead4;
+
+  --shell-text: #e2e8f0;
+  --shell-muted: #94a3b8;
+
+  --shell-border: rgba(6, 182, 212, 0.2);
+  --shell-border-hover: rgba(34, 211, 238, 0.5);
+
+  --shell-gradient: linear-gradient(
+    135deg,
+    #0c141f 0%,
+    #111c2b 50%,
+    #0e1724 100%
+  );
+
+  --shell-accent-gradient: linear-gradient(
+    90deg,
+    #06b6d4,
+    #5eead4
+  );
+
+  --shell-card-radius: 16px;
+  --shell-card-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}

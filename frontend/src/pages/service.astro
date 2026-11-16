@@ -4,24 +4,28 @@ import Layout from '../layouts/Layout.astro';
 
 const services = [
   {
-    icon: '📖',
+    icon: 'guides',
     title: 'Інструкції',
     description: 'Посібники з використання функцій SolarFlow.',
+    href: '/service/guides',
   },
   {
-    icon: '❓',
+    icon: 'help',
     title: 'Центр допомоги',
     description: 'Відповіді на запитання та допомога користувачам.',
+    href: '/service/help',
   },
   {
-    icon: '🔄',
+    icon: 'updates',
     title: 'Оновлення системи',
     description: 'Інформація про оновлення та нові можливості.',
+    href: '/service/updates',
   },
   {
-    icon: '💬',
+    icon: 'feedback',
     title: "Зворотний зв'язок",
     description: 'Запитання, відгуки та пропозиції.',
+    href: '/service/feedback',
   },
 ];
 ---
@@ -35,14 +39,46 @@ const services = [
 
     <div class="service-grid">
       {services.map((service) => (
-        <article class="service-card">
+        <a href={service.href} class="service-card">
           <div class="service-icon" aria-hidden="true">
-            {service.icon}
+            {service.icon === 'guides' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 6.5C9.5 4.8 6.5 4.5 3 5V19C6.5 18.5 9.5 18.8 12 20.5" />
+                <path d="M12 6.5C14.5 4.8 17.5 4.5 21 5V19C17.5 18.5 14.5 18.8 12 20.5" />
+                <path d="M12 6.5V20.5" />
+              </svg>
+            )}
+
+            {service.icon === 'help' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M9.5 9A2.5 2.5 0 1 1 13.5 11C12.5 11.7 12 12.3 12 13.5" />
+                <path d="M12 17H12.01" />
+              </svg>
+            )}
+
+            {service.icon === 'updates' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M20 7V3L16 7L20 11V7" />
+                <path d="M20 7A8 8 0 0 0 5.5 5.5" />
+                <path d="M4 17V21L8 17L4 13V17" />
+                <path d="M4 17A8 8 0 0 0 18.5 18.5" />
+              </svg>
+            )}
+
+            {service.icon === 'feedback' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M20 15A4 4 0 0 1 16 19H8L3 22V7A4 4 0 0 1 7 3H16A4 4 0 0 1 20 7V15Z" />
+                <path d="M8 10H15M8 14H13" />
+              </svg>
+            )}
           </div>
 
           <h2>{service.title}</h2>
           <p>{service.description}</p>
-        </article>
+
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
       ))}
     </div>
   </section>
@@ -50,11 +86,12 @@ const services = [
 
 <style>
   .service-page {
-    padding: 48px 24px 80px;
+    min-height: calc(100vh - 76px);
+    padding: 72px 24px 100px;
   }
 
   .service-grid {
-    max-width: var(--container-width);
+    max-width: 1000px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -62,27 +99,114 @@ const services = [
   }
 
   .service-card {
-    padding: 34px;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 14px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 235px;
+    padding: 30px;
+    overflow: hidden;
+
+    background: var(--shell-surface);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid var(--shell-border);
+    border-radius: var(--shell-card-radius);
+
+    box-shadow: var(--shell-card-shadow);
+    text-decoration: none;
+
+    transition:
+      transform 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--shell-accent-gradient);
+    opacity: 0.35;
+    transition: opacity 0.25s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--shell-border-hover);
+
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.35),
+      0 0 20px rgba(34, 211, 238, 0.12);
+  }
+
+  .service-card:hover::before {
+    opacity: 1;
+  }
+
+  .service-card:focus-visible {
+    outline: 2px solid var(--shell-primary);
+    outline-offset: 4px;
   }
 
   .service-icon {
-    margin-bottom: 22px;
-    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 24px;
+
+    color: var(--shell-primary);
+    background: rgba(6, 182, 212, 0.08);
+    border: 1px solid var(--shell-border);
+    border-radius: 12px;
+  }
+
+  .service-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .service-card h2 {
-    margin: 0 0 14px;
-    color: var(--color-text);
-    font-size: 22px;
+    margin: 0 0 12px;
+    color: var(--shell-text);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
   }
 
   .service-card p {
     margin: 0;
-    color: var(--color-muted);
-    line-height: 1.7;
+    padding-right: 24px;
+    color: var(--shell-muted);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .card-arrow {
+    position: absolute;
+    right: 26px;
+    bottom: 24px;
+
+    color: var(--shell-primary);
+    font-size: 21px;
+    opacity: 0.5;
+
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .service-card:hover .card-arrow {
+    opacity: 1;
+    transform: translate(3px, -3px);
   }
 
   .visually-hidden {
@@ -99,11 +223,25 @@ const services = [
 
   @media (max-width: 600px) {
     .service-page {
-      padding: 32px 20px 60px;
+      padding: 40px 16px 64px;
     }
 
     .service-grid {
       grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .service-card {
+      min-height: 210px;
+      padding: 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-card,
+    .service-card::before,
+    .card-arrow {
+      transition: none;
     }
   }
 </style>

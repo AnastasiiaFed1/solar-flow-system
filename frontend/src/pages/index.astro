@@ -1,123 +1,215 @@
 
 ---
 import Layout from '../layouts/Layout.astro';
+
+const features = [
+  {
+    title: 'Моніторинг',
+    description: 'Слідкуйте за генерацією та споживанням енергії.',
+    href: '/dashboard',
+    icon: 'monitor',
+  },
+  {
+    title: 'Конфігурація',
+    description: 'Налаштовуйте параметри сонячної електростанції.',
+    href: '/configurator',
+    icon: 'settings',
+  },
+  {
+    title: '3D-симуляція',
+    description: 'Моделюйте роботу СЕС за різних умов.',
+    href: '/simulation',
+    icon: 'cube',
+  },
+  {
+    title: 'Smart Grid',
+    description: 'Аналізуйте та оптимізуйте енергоспоживання.',
+    href: '/smart-grid',
+    icon: 'energy',
+  },
+  {
+    title: 'Еко-аналітика',
+    description: 'Оцінюйте економію та екологічний вплив.',
+    href: '/finance',
+    icon: 'leaf',
+  },
+];
 ---
 
 <Layout
   title="SolarFlow — Головна"
   description="SolarFlow — платформа для проєктування, моніторингу та моделювання сонячних електростанцій."
 >
-  <section class="hero">
-    <div class="hero-content">
-      <span class="hero-label">☀️ Розумна сонячна енергетика</span>
+  <div class="home-page">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-label">
+          <span class="label-dot"></span>
+          РОЗУМНА СОНЯЧНА ЕНЕРГЕТИКА
+        </div>
 
-      <h1>Керуйте сонячною енергією разом із SolarFlow</h1>
+        <h1>
+          Керуйте сонячною енергією разом із
+          <span>SolarFlow</span>
+        </h1>
 
-      <p>
-        Єдина платформа для проєктування, моніторингу та
-        моделювання сонячних електростанцій.
-        Досліджуйте можливості відновлюваної енергетики
-        за допомогою сучасних цифрових інструментів.
-      </p>
+        <p class="hero-description">
+          Єдина платформа для проєктування, моніторингу та
+          моделювання сонячних електростанцій.
+          Досліджуйте можливості відновлюваної енергетики
+          за допомогою сучасних цифрових інструментів.
+        </p>
 
-      <div class="hero-actions">
-        <a href="/service" class="button button-primary">
-          Перейти до сервісу
-        </a>
+        <div class="hero-actions">
+          <a href="/dashboard" class="button button-primary">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            Перейти до Dashboard
+            <span aria-hidden="true">→</span>
+          </a>
 
-        <a href="/features" class="button button-secondary">
-          Дізнатися більше
-        </a>
-      </div>
-    </div>
-
-    <div class="hero-visual" aria-hidden="true">
-      <div class="sun">☀️</div>
-      <div class="solar-panel">
-        <div class="panel-grid">
-          {Array.from({ length: 12 }, () => <span></span>)}
+          <a href="/features" class="button button-secondary">
+            Дізнатися більше
+          </a>
         </div>
       </div>
-      <div class="visual-caption">
-        Енергія майбутнього — вже сьогодні
+
+      <div class="hero-visual">
+        <img
+          src="/images/solarflow-house1.png"
+          alt="Сучасний будинок із сонячними панелями, домашнім акумулятором та зарядною станцією для електромобіля"
+          width="750"
+          height="522"
+          loading="eager"
+        />
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="intro">
-    <div class="section-heading">
-      <h2>Можливості SolarFlow</h2>
-      <p>
-        Інструменти для аналізу, керування та ефективного
-        використання сонячної енергії.
-      </p>
-    </div>
+    <section class="features" aria-label="Можливості SolarFlow">
+      <div class="features-grid">
+        {features.map((feature) => (
+          <a href={feature.href} class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              {feature.icon === 'monitor' && (
+                <svg viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="13" width="4" height="8" rx="1"></rect>
+                  <rect x="10" y="8" width="4" height="13" rx="1"></rect>
+                  <rect x="17" y="3" width="4" height="18" rx="1"></rect>
+                </svg>
+              )}
 
-    <div class="features-grid">
-      <article class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Моніторинг</h3>
-        <p>
-          Відстежуйте показники роботи сонячної
-          електростанції у зручному інтерфейсі.
-        </p>
-      </article>
+              {feature.icon === 'settings' && (
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M3 7H21M3 17H21" />
+                  <circle cx="9" cy="7" r="3" />
+                  <circle cx="16" cy="17" r="3" />
+                </svg>
+              )}
 
-      <article class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Моделювання</h3>
-        <p>
-          Досліджуйте виробництво та споживання
-          електроенергії за різних умов.
-        </p>
-      </article>
+              {feature.icon === 'cube' && (
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L21 7V17L12 22L3 17V7L12 2Z" />
+                  <path d="M3 7L12 12L21 7M12 12V22" />
+                </svg>
+              )}
 
-      <article class="feature-card">
-        <div class="feature-icon">🌱</div>
-        <h3>Оптимізація</h3>
-        <p>
-          Аналізуйте енергетичні сценарії для
-          ефективнішого використання ресурсів.
-        </p>
-      </article>
-    </div>
-  </section>
+              {feature.icon === 'energy' && (
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M13 2L4 13H11L10 22L20 10H13L13 2Z" />
+                </svg>
+              )}
+
+              {feature.icon === 'leaf' && (
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M20 4C9 4 4 9 4 16C4 19 6 21 9 21C16 21 20 14 20 4Z" />
+                  <path d="M4 21C7 15 11 11 17 8" />
+                </svg>
+              )}
+            </div>
+
+            <h3>{feature.title}</h3>
+            <p>{feature.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
 </Layout>
 
 <style>
+  .home-page {
+    min-height: calc(100vh - 76px);
+    padding: 54px 32px 72px;
+    background:
+      radial-gradient(
+        ellipse at 55% 30%,
+        rgba(6, 182, 212, 0.09),
+        transparent 55%
+      ),
+      var(--shell-gradient);
+  }
+
   .hero {
-    max-width: var(--container-width);
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 96px 24px;
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     align-items: center;
-    gap: 64px;
+    gap: 48px;
+  }
+
+  .hero-content {
+    min-width: 0;
   }
 
   .hero-label {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: var(--color-primary);
-    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    color: var(--shell-primary);
+    font-size: 12px;
     font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .label-dot {
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--shell-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
   }
 
   .hero h1 {
+    max-width: 690px;
     margin: 0;
-    max-width: 650px;
-    color: var(--color-text);
-    font-size: clamp(34px, 4vw, 54px);
-    line-height: 1.15;
-    letter-spacing: -1.5px;
+    color: var(--shell-text);
+    font-size: clamp(38px, 4vw, 64px);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -1.8px;
   }
 
-  .hero-content > p {
-    max-width: 570px;
-    margin: 24px 0 32px;
-    color: var(--color-muted);
-    font-size: 17px;
-    line-height: 1.8;
+  .hero h1 span {
+    display: block;
+    width: fit-content;
+    background: var(--shell-accent-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .hero-description {
+    max-width: 610px;
+    margin: 26px 0 30px;
+    color: var(--shell-muted);
+    font-size: 16px;
+    line-height: 1.75;
   }
 
   .hero-actions {
@@ -130,152 +222,214 @@ import Layout from '../layouts/Layout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
+    gap: 12px;
+    min-height: 52px;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
     text-decoration: none;
-    transition: transform 0.2s, background 0.2s;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
   }
 
-  .button:hover {
-    transform: translateY(-2px);
+  .button svg {
+    width: 19px;
+    height: 19px;
+    stroke: currentColor;
+    stroke-width: 1.8;
   }
 
   .button-primary {
-    background: var(--color-primary);
-    color: #ffffff;
+    background: var(--shell-accent-gradient);
+    color: #081720;
+    box-shadow: 0 4px 22px rgba(6, 182, 212, 0.2);
   }
 
   .button-primary:hover {
-    background: #166534;
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+    transform: translateY(-2px);
   }
 
   .button-secondary {
-    background: #f0fdf4;
-    color: var(--color-primary);
-    border: 1px solid #bbf7d0;
+    color: var(--shell-text);
+    border: 1px solid rgba(148, 163, 184, 0.6);
+    background: rgba(13, 21, 32, 0.6);
+  }
+
+  .button-secondary:hover {
+    border-color: var(--shell-primary);
+    transform: translateY(-2px);
+  }
+
+  .button:focus-visible,
+  .feature-card:focus-visible {
+    outline: 2px solid var(--shell-primary);
+    outline-offset: 4px;
   }
 
   .hero-visual {
-    min-height: 350px;
-    padding: 36px;
-    border-radius: 24px;
-    background: linear-gradient(145deg, #ecfdf5, #d1fae5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
+    position: relative;
+    width: 100%;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.28),
+      0 0 30px rgba(6, 182, 212, 0.08);
   }
 
-  .sun {
-    font-size: 70px;
+  .hero-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
-  .solar-panel {
-    width: min(100%, 290px);
-    padding: 12px;
-    background: #1e3a5f;
-    border: 5px solid #334155;
-    border-radius: 8px;
-    transform: perspective(500px) rotateX(15deg);
-    box-shadow: 0 15px 24px #00000020;
-  }
-
-  .panel-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
-  }
-
-  .panel-grid span {
-    height: 40px;
-    background: linear-gradient(135deg, #2563eb, #0f172a);
-    border: 1px solid #60a5fa;
-    border-radius: 2px;
-  }
-
-  .visual-caption {
-    color: #166534;
-    font-weight: 600;
-    text-align: center;
-  }
-
-  .intro {
-    padding: 80px 24px 100px;
-    background: #f8faf9;
-  }
-
-  .section-heading {
-    max-width: 700px;
-    margin: 0 auto 44px;
-    text-align: center;
-  }
-
-  .section-heading h2 {
-    margin: 0 0 16px;
-    color: var(--color-text);
-    font-size: 34px;
-  }
-
-  .section-heading p {
-    margin: 0;
-    color: var(--color-muted);
-    font-size: 16px;
-    line-height: 1.7;
+  .features {
+    max-width: 1440px;
+    margin: 58px auto 0;
   }
 
   .features-grid {
-    max-width: var(--container-width);
-    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
   }
 
   .feature-card {
-    padding: 32px;
-    border: 1px solid var(--color-border);
-    border-radius: 14px;
-    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    min-height: 192px;
+    padding: 24px 20px;
+    border: 1px solid var(--shell-border);
+    border-radius: var(--shell-card-radius);
+    background: var(--shell-surface);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shell-card-shadow);
+    text-decoration: none;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--shell-border-hover);
+    box-shadow:
+      0 10px 32px rgba(0, 0, 0, 0.3),
+      0 0 16px rgba(34, 211, 238, 0.1);
   }
 
   .feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     margin-bottom: 18px;
-    font-size: 34px;
+    color: var(--shell-primary);
+  }
+
+  .feature-icon svg {
+    width: 35px;
+    height: 35px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .feature-icon svg rect {
+    fill: currentColor;
+    stroke: none;
   }
 
   .feature-card h3 {
-    margin: 0 0 12px;
-    color: var(--color-text);
-    font-size: 21px;
+    margin: 0 0 10px;
+    color: var(--shell-text);
+    font-size: 18px;
+    font-weight: 700;
   }
 
   .feature-card p {
     margin: 0;
-    color: var(--color-muted);
-    line-height: 1.7;
+    color: var(--shell-muted);
+    font-size: 13px;
+    line-height: 1.6;
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: 1100px) {
+    .hero {
+      gap: 32px;
+    }
+
+    .features-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .home-page {
+      padding: 40px 20px 60px;
+    }
+
     .hero {
       grid-template-columns: 1fr;
-      padding: 60px 24px;
-      gap: 40px;
+      gap: 36px;
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 7vw, 48px);
+    }
+
+    .features-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .features {
+      margin-top: 44px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .home-page {
+      padding: 30px 16px 48px;
+    }
+
+    .hero-label {
+      font-size: 10px;
+    }
+
+    .hero-description {
+      font-size: 14px;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+    }
+
+    .button {
+      width: 100%;
     }
 
     .features-grid {
       grid-template-columns: 1fr;
     }
 
-    .intro {
-      padding: 60px 24px;
+    .feature-card {
+      min-height: auto;
     }
+  }
 
-    .section-heading h2 {
-      font-size: 28px;
+  @media (prefers-reduced-motion: reduce) {
+    .button,
+    .feature-card {
+      transition: none;
     }
   }
 </style>
