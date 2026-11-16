@@ -27,18 +27,19 @@
 
         <div class="card-body">
             <div class="control-row">
-                <label :for="`priority-${appliance.id}`">Пріоритет:</label>
+                <label :for="`priority-${appliance.id}`" class="text-slate-300 text-xs">Пріоритет:</label>
                 <select :id="`priority-${appliance.id}`"
                         :value="appliance.priority"
-                        @change="emit('change-priority', appliance.id, Number($event.target.value))">
-                    <option :value="1">1 — Критичний (завжди живити)</option>
-                    <option :value="2">2 — Стандартний</option>
-                    <option :value="3">3 — Надлишковий (Smart Grid)</option>
+                        @change="emit('change-priority', appliance.id, Number($event.target.value))"
+                        class="card-select">
+                    <option :value="1" class="bg-[#0d1520] text-slate-100">1 — Критичний</option>
+                    <option :value="2" class="bg-[#0d1520] text-slate-100">2 — Стандартний</option>
+                    <option :value="3" class="bg-[#0d1520] text-slate-100">3 — Smart Grid</option>
                 </select>
             </div>
 
             <div class="control-row">
-                <span>Авто-керування Smart Grid:</span>
+                <span class="text-slate-300 text-xs">Авто-керування Smart Grid:</span>
                 <label class="switch">
                     <input type="checkbox"
                            :checked="appliance.isSmartGridEnabled"
@@ -65,16 +66,21 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 1rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        background: #ffffff;
-        transition: border-color 0.2s, box-shadow 0.2s;
+        padding: 1.1rem;
+        margin-bottom: 0.75rem; /* Додає надійний відступ знизу на випадок одноколонкового виведення */
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 12px;
+        background: linear-gradient(165deg, rgba(16, 34, 53, 0.92), rgba(10, 22, 36, 0.94));
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
+        .appliance-card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
         .appliance-card.auto-active {
-            border-color: #10b981;
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+            border-color: #34d399;
+            box-shadow: 0 0 12px rgba(52, 211, 153, 0.2);
         }
 
     .card-header {
@@ -82,49 +88,54 @@
         justify-content: space-between;
         align-items: flex-start;
         gap: 0.5rem;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
     }
 
     .title-group h4 {
-        margin: 0 0 0.25rem 0;
-        font-size: 1.05rem;
-        color: #0f172a;
+        margin: 0 0 0.15rem 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #f1f5f9;
     }
 
     .power-tag {
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         font-weight: 600;
-        color: #475569;
+        color: #38bdf8;
+        font-family: monospace;
     }
 
     .priority-badge {
-        padding: 0.2rem 0.5rem;
+        padding: 0.15rem 0.5rem;
         border-radius: 6px;
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 600;
         white-space: nowrap;
     }
 
     .badge-critical {
-        background: #fee2e2;
-        color: #991b1b;
+        background: rgba(244, 63, 94, 0.15);
+        color: #fb7185;
+        border: 1px solid rgba(244, 63, 94, 0.3);
     }
 
     .badge-standard {
-        background: #e0f2fe;
-        color: #075985;
+        background: rgba(56, 189, 248, 0.1);
+        color: #38bdf8;
+        border: 1px solid rgba(56, 189, 248, 0.2);
     }
 
     .badge-surplus {
-        background: #dcfce7;
-        color: #166534;
+        background: rgba(52, 211, 153, 0.15);
+        color: #34d399;
+        border: 1px solid rgba(52, 211, 153, 0.3);
     }
 
     .card-body {
         display: flex;
         flex-direction: column;
-        gap: 0.65rem;
-        font-size: 0.9rem;
+        gap: 0.6rem;
+        font-size: 0.82rem;
     }
 
     .control-row {
@@ -134,50 +145,60 @@
         gap: 0.5rem;
     }
 
-        .control-row select {
-            padding: 0.3rem 0.5rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 0.85rem;
+    .card-select {
+        padding: 0.3rem 0.5rem;
+        background: #0a1826;
+        border: 1px solid #2b4d6e;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        color: #e2e8f0;
+        outline: none;
+        cursor: pointer;
+    }
+
+        .card-select:focus {
+            border-color: #2dd4bf;
         }
 
     .auto-notice {
-        margin: 0.25rem 0 0 0;
+        margin: 0.15rem 0 0 0;
         padding: 0.35rem 0.5rem;
-        background: #ecfdf5;
-        color: #047857;
+        background: rgba(52, 211, 153, 0.1);
+        color: #34d399;
+        border: 1px solid rgba(52, 211, 153, 0.2);
         border-radius: 6px;
-        font-size: 0.8rem;
+        font-size: 0.72rem;
         font-weight: 500;
     }
 
     .card-footer {
-        margin-top: 1rem;
-        padding-top: 0.65rem;
-        border-top: 1px solid #f1f5f9;
+        margin-top: 0.75rem;
+        padding-top: 0.6rem;
+        border-top: 1px solid rgba(56, 189, 248, 0.15);
         display: flex;
         justify-content: flex-end;
     }
 
     .btn-delete {
         background: transparent;
-        border: 1px solid #fca5a5;
-        color: #dc2626;
-        padding: 0.3rem 0.7rem;
+        border: 1px solid rgba(244, 63, 94, 0.3);
+        color: #fb7185;
+        padding: 0.25rem 0.65rem;
         border-radius: 6px;
         cursor: pointer;
-        font-size: 0.8rem;
+        font-size: 0.72rem;
+        transition: background 0.2s;
     }
 
         .btn-delete:hover {
-            background: #fef2f2;
+            background: rgba(244, 63, 94, 0.1);
         }
 
     .switch {
         position: relative;
         display: inline-block;
-        width: 40px;
-        height: 22px;
+        width: 34px;
+        height: 18px;
     }
 
         .switch input {
@@ -190,28 +211,31 @@
         position: absolute;
         cursor: pointer;
         inset: 0;
-        background-color: #cbd5e1;
-        border-radius: 22px;
+        background-color: #0a1826;
+        border: 1px solid #2b4d6e;
+        border-radius: 18px;
         transition: 0.2s;
     }
 
         .slider::before {
             content: "";
             position: absolute;
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
+            height: 12px;
+            width: 12px;
+            left: 2px;
+            bottom: 2px;
+            background-color: #94a3b8;
             border-radius: 50%;
             transition: 0.2s;
         }
 
     input:checked + .slider {
-        background-color: #10b981;
+        background-color: rgba(45, 212, 191, 0.2);
+        border-color: #2dd4bf;
     }
 
         input:checked + .slider::before {
-            transform: translateX(18px);
+            background-color: #2dd4bf;
+            transform: translateX(16px);
         }
 </style>

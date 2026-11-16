@@ -18,7 +18,7 @@
             <label class="toggle-label">
                 <input type="checkbox"
                        :checked="isAutomationActive"
-                       @change="emit('update:isAutomationActive', $event.target.checked)"/>
+                       @change="emit('update:isAutomationActive', $event.target.checked)" />
                 <span>{{ isAutomationActive ? 'Сценарій активний' : 'Вимкнено' }}</span>
             </label>
         </div>
@@ -26,7 +26,7 @@
         <div class="rule-box">
             <div class="rule-info">
                 <span>Поріг заряду АКБ для ввімкнення навантаження (Бойлер / EV):</span>
-                <strong>{{ batteryThreshold }}%</strong>
+                <strong class="text-[#2dd4bf]">{{ batteryThreshold }}%</strong>
             </div>
 
             <input type="range"
@@ -35,7 +35,7 @@
                    step="5"
                    :value="batteryThreshold"
                    :disabled="!isAutomationActive"
-                   @input="emit('update:batteryThreshold', Number($event.target.value))"/>
+                   @input="emit('update:batteryThreshold', Number($event.target.value))" />
 
             <div class="status-indicator" :class="{ triggered: isAutomationActive && currentBatteryLevel >= batteryThreshold }">
                 Поточний заряд АКБ: <strong>{{ currentBatteryLevel }}%</strong> —
@@ -49,10 +49,9 @@
 
 <style scoped>
     .automation-panel {
-        padding: 1.25rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        background: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 
     .panel-header {
@@ -61,19 +60,20 @@
         justify-content: space-between;
         align-items: center;
         gap: 0.75rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.25rem;
     }
 
         .panel-header h3 {
             margin: 0;
-            font-size: 1.1rem;
-            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f8fafc;
         }
 
     .subtitle {
         margin: 0.15rem 0 0 0;
-        font-size: 0.85rem;
-        color: #64748b;
+        font-size: 0.78rem;
+        color: #94a3b8;
     }
 
     .toggle-label {
@@ -81,37 +81,46 @@
         align-items: center;
         gap: 0.45rem;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+        color: #cbd5e1;
         cursor: pointer;
     }
+
+        .toggle-label input[type="checkbox"] {
+            accent-color: #2dd4bf;
+        }
 
     .rule-box {
         display: flex;
         flex-direction: column;
-        gap: 0.65rem;
+        gap: 0.6rem;
     }
 
     .rule-info {
         display: flex;
         justify-content: space-between;
-        font-size: 0.9rem;
+        font-size: 0.82rem;
+        color: #cbd5e1;
     }
 
     input[type="range"] {
         width: 100%;
-        accent-color: #0284c7;
+        accent-color: #2dd4bf;
+        cursor: pointer;
     }
 
     .status-indicator {
-        padding: 0.5rem 0.75rem;
+        padding: 0.45rem 0.7rem;
         border-radius: 8px;
-        background: #e2e8f0;
-        color: #334155;
-        font-size: 0.85rem;
+        background: rgba(10, 24, 38, 0.8);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        color: #94a3b8;
+        font-size: 0.78rem;
     }
 
         .status-indicator.triggered {
-            background: #dcfce7;
-            color: #166534;
+            background: rgba(45, 212, 191, 0.1);
+            border-color: rgba(45, 212, 191, 0.3);
+            color: #34d399;
         }
 </style>

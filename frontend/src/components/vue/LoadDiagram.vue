@@ -8,13 +8,19 @@
 
     const getWatts = (item) => item.powerWatts ?? item.powerConsumptionWatts ?? 0;
 
+    // Перевіряємо чи прилад активний (увімкнений через Smart Grid або за замовчуванням)
+    const isItemActive = (item) => item.isSmartGridEnabled ?? item.isActive ?? true;
+
+    // Враховуємо лише активні прилади для загального навантаження
     const totalLoadWatts = computed(() =>
-        props.appliances.reduce((sum, item) => sum + getWatts(item), 0)
+        props.appliances.reduce((sum, item) => sum + (isItemActive(item) ? getWatts(item) : 0), 0)
     );
 
     const loadByPriority = computed(() => {
         const groups = { p1: 0, p2: 0, p3: 0 };
         for (const item of props.appliances) {
+            if (!isItemActive(item)) continue; // Вимкнені прилади не йдуть у баланс навантаження
+
             const watts = getWatts(item);
             if (item.priority === 1) groups.p1 += watts;
             else if (item.priority === 2) groups.p2 += watts;
@@ -34,8 +40,8 @@
         <div class="diagram-header">
             <h3>Баланс навантаження по пріоритетах</h3>
             <span class="totals">
-                Навантаження: <strong>{{ (totalLoadWatts / 1000).toFixed(2) }} кВт</strong> /
-                Генерація СЕС: <strong>{{ (solarGenerationWatts / 1000).toFixed(2) }} кВт</strong>
+                Навантаження: <strong class="text-[#38bdf8]">{{ (totalLoadWatts / 1000).toFixed(2) }} кВт</strong> /
+                Генерація СЕС: <strong class="text-[#34d399]">{{ (solarGenerationWatts / 1000).toFixed(2) }} кВт</strong>
             </span>
         </div>
 
@@ -55,10 +61,9 @@
 
 <style scoped>
     .load-diagram {
-        padding: 1.25rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
     }
 
     .diagram-header {
@@ -67,28 +72,30 @@
         justify-content: space-between;
         align-items: center;
         gap: 0.5rem;
-        margin-bottom: 0.85rem;
+        margin-bottom: 0.1rem;
     }
 
         .diagram-header h3 {
             margin: 0;
-            font-size: 1.05rem;
-            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f8fafc;
         }
 
     .totals {
-        font-size: 0.88rem;
-        color: #475569;
+        font-size: 0.78rem;
+        color: #94a3b8;
     }
 
     .progress-bar {
         display: flex;
-        height: 16px;
+        height: 12px;
         width: 100%;
-        background: #f1f5f9;
-        border-radius: 8px;
+        background: #0a1826;
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 6px;
         overflow: hidden;
-        margin-bottom: 0.75rem;
+        margin: 0.2rem 0;
     }
 
     .bar-segment {
@@ -97,42 +104,42 @@
     }
 
         .bar-segment.p1 {
-            background: #ef4444;
+            background: #f43f5e;
         }
 
         .bar-segment.p2 {
-            background: #0ea5e9;
+            background: #38bdf8;
         }
 
         .bar-segment.p3 {
-            background: #10b981;
+            background: #34d399;
         }
 
     .legend {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
-        font-size: 0.82rem;
-        color: #334155;
+        font-size: 0.76rem;
+        color: #cbd5e1;
     }
 
     .dot {
         display: inline-block;
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
         margin-right: 4px;
     }
 
         .dot.p1 {
-            background: #ef4444;
+            background: #f43f5e;
         }
 
         .dot.p2 {
-            background: #0ea5e9;
+            background: #38bdf8;
         }
 
         .dot.p3 {
-            background: #10b981;
+            background: #34d399;
         }
 </style>
