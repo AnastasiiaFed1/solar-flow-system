@@ -19,6 +19,7 @@
     "@nanostores/react": "^2.0.1",
     "@nanostores/vue": "^1.1.0",
     "astro": "^7.4.8",
+    "leaflet": "^1.9.4",
     "lucide-react": "^1.73.0",
     "nanostores": "^1.5.5",
     "react": "^19.3.1",
@@ -26,13 +27,16 @@
     "reactflow": "^11.11.4",
     "recharts": "^3.10.1",
     "svelte": "^5.57.3",
+    "three": "^0.187.0",
     "vue": "^3.5.45"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@tailwindcss/vite": "^4.3.5",
+    "@types/leaflet": "^1.9.22",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
     "tailwindcss": "^4.3.5",
     "typescript": "^6.0.3",
     "vitest": "^5.1.0"
