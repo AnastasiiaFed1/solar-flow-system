@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
-import { $energyState } from '../../stores/energyStore';
+import { $energyState, syncEnergyFromBackend } from '../../stores/energyStore';
 import { PowerFlowDiagram } from './PowerFlowDiagram';
 import { HealthMatrix } from './HealthMatrix';
 import { EmergencyTimer } from './EmergencyTimer';
@@ -10,6 +10,12 @@ import { TelemetryModal } from './TelemetryModal';
 export const Dashboard: React.FC = () => {
     const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
     const energy = useStore($energyState);
+
+    useEffect(() => {
+        syncEnergyFromBackend();
+        const interval = setInterval(syncEnergyFromBackend, 3000);
+        return () => clearInterval(interval);
+    }, []);
 
     const inverterKW = Number(Math.max(0, energy.solarPowerKW - energy.batteryPowerKW).toFixed(2));
 
