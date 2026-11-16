@@ -1,17 +1,24 @@
-
 ---
 import Layout from '../layouts/Layout.astro';
-import ModulePlaceholder from '../components/shared/ModulePlaceholder.astro';
+import SimulationCore from '../components/svelte/SimulationCore.svelte';
 ---
 
 <Layout
-  title="Симуляція та 3D — SolarFlow"
-  description="Симуляція погодних умов і 3D-візуалізація сонячної електростанції."
+  title="Симуляція сонячної генерації — SolarFlow"
+  description="Оцінка сонячної генерації за погодою, часом доби та орієнтацією панелей."
 >
-  <ModulePlaceholder
-    icon="🌤️"
-    title="Симуляція та 3D"
-    description="Моделювання погодних умов і тривимірна візуалізація роботи сонячних панелей."
-    technology="Svelte"
-  />
+  <SimulationCore client:load />
 </Layout>
+
+<style is:global>
+  body:has(#simulation-title) {
+    --color-primary: #22d3ee;
+    --color-background: #0c141f;
+    --color-surface: #162231;
+    --color-text: #e2e8f0;
+    --color-muted: #94a3b8;
+    --color-border: rgb(6 182 212 / 20%);
+    background: linear-gradient(to bottom right, #0c141f, #111c2b, #0e1724);
+    color: var(--color-text);
+  }
+</style>
