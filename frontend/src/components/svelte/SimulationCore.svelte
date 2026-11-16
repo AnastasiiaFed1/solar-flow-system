@@ -1,7 +1,16 @@
 <script lang="ts">
+  import TimeTravelEngine from "./TimeTravelEngine.svelte";
+  import SolarPanel3D from "./SolarPanel3D.svelte";
   import ComparisonChart from "./ComparisonChart.svelte";
   import EnergyAnalytics from "./EnergyAnalytics.svelte";
   import { dailySolarProfile, solarPowerAt, type SolarSettings } from '../../lib/calculations/solar';
+
+  const views = [
+    { id: 'time', label: 'Симуляція часу' },
+    { id: 'orientation', label: '3D-орієнтація' },
+    { id: 'analytics', label: 'Аналітика' },
+  ] as const;
+  let view = $state<(typeof views)[number]['id']>('time');
 
   let capacityKw = $state(5);
   let tilt = $state(30);
@@ -26,6 +35,12 @@
   <div class="heading"><a class="back" href="/features">← До можливостей</a><div class="title-row"><h1 id="simulation-title"><span>SolarFlow</span> / Симуляція сонячної генерації</h1><span class="status" class:idle={power === 0}>{power > 0 ? "Генерація активна" : "Генерація відсутня"}</span></div>
   <p class="muted">Змінюй погоду, час та орієнтацію панелей, щоб порівняти виробіток.</p></div>
 
+  <nav class="views" aria-label="Розділи симуляції">
+    {#each views as item (item.id)}
+      <button type="button" aria-pressed={view === item.id} onclick={() => view = item.id}>{item.label}</button>
+    {/each}
+  </nav>
+
   <div class="workspace">
     <div class="controls">
       <div class="card">
@@ -37,9 +52,7 @@
           <option value="overcast">Похмуро</option>
         </select>
       </label>
-      <label>Час доби <strong>{time(hour)}</strong>
-        <input type="range" min="0" max="23" bind:value={hour} style:--progress={(hour / 23 * 100) + "%"} aria-valuetext={time(hour)} />
-      </label>
+      {#if view === "time"}<TimeTravelEngine bind:hour />{/if}
       <label>Номінальна потужність <strong>{format.format(capacityKw)} кВт</strong>
         <input type="range" min="1" max="20" step="0.5" bind:value={capacityKw} style:--progress={((capacityKw - 1) / 19 * 100) + "%"} />
       </label>
@@ -55,17 +68,20 @@
     </div>
 
     <div class="results">
+      {#if view === "orientation"}
       <h2>Візуалізація сонячної станції</h2>
       <div class="scene">
         <img src="/solar-station.png" alt="Будинок із сонячними панелями, інвертором та акумулятором" width="1200" height="800" />
         <div class="angles"><span>Нахил <strong>{tilt}°</strong></span><span>Азимут <strong>{azimuth}°</strong></span></div>
-        <div class="orientation" aria-hidden="true"><div class="panel" style:--tilt={tilt + "deg"} style:--azimuth={(azimuth - 180) + "deg"}></div></div>
       </div>
+      <SolarPanel3D {tilt} {azimuth} />
+      {:else}
       <div class="metrics" aria-live="polite">
         <div><span>Потужність о {time(hour)}</span><strong>{format.format(power)} кВт</strong></div>
         <div><span>Енергія за добу</span><strong>{format.format(dailyEnergy)} кВт·год</strong></div>
       </div>
-      <h2>Генерація за годинами</h2>
+      {#if view === "analytics"}
+      <h2>Порівняльна аналітика генерації</h2>
       <div class="comparison-actions">
         <button type="button" onclick={() => baseline = { ...settings }}>
           {baseline ? 'Оновити сценарій A' : 'Зберегти як сценарій A'}
@@ -80,7 +96,12 @@
         <p class="muted note comparison-help">Збережи сценарій A, а потім зміни налаштування для сценарію B.</p>
       {/if}
       <ComparisonChart current={profile} baseline={baselineProfile} {hour} {scale} />
+      {:else}
+      <h2>Добова симуляція генерації</h2>
+      <ComparisonChart current={profile} baseline={null} {hour} scale={capacityKw} />
+      {/if}
       <p class="muted note">Оцінка для умовного дня зі сходом о 06:00 і заходом о 18:00.</p>
+      {/if}
     </div>
   </div>
 </section>
@@ -107,11 +128,6 @@
   .scene img { display: block; width: 100%; height: auto; aspect-ratio: 1.85; object-fit: cover; }
   .angles { position: absolute; top: .65rem; left: .65rem; display: flex; flex-wrap: wrap; gap: .4rem; }
   .angles span { padding: .2rem .45rem; border: 1px solid #327079; border-radius: .3rem; background: #081825ed; font-size: .75rem; }
-  .orientation { position: absolute; bottom: .65rem; right: .65rem; display: grid; place-items: center; width: 5.5rem; height: 4rem; perspective: 200px; background: #081825ed; border: 1px solid #327079; border-radius: .35rem; }
-  .panel { width: 3.6rem; height: 2.3rem; border: 2px solid #71e4ef; border-radius: .15rem;
-    background: repeating-linear-gradient(90deg, transparent 0 23%, #6db7dc 24% 25%),
-      repeating-linear-gradient(0deg, #153e75 0 31%, #6db7dc 32% 33.3%);
-    box-shadow: 0 0 12px #49d8f477; transform: rotateX(35deg) rotateZ(var(--azimuth)) rotateX(var(--tilt)); }
   .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: .85rem 0 1rem; }
   .metrics div { min-width: 0; padding: .55rem .65rem; background: #0d1520; border: 1px solid #2d5368; border-radius: .4rem; }
   .metrics span, .metrics strong { display: block; }
@@ -134,4 +150,9 @@
   input[type='range']::-webkit-slider-thumb { appearance: none; width: 1rem; height: 1rem; border-radius: 50%; border: 2px solid #0d1520; background: #22d3ee; box-shadow: 0 0 8px rgb(34 211 238 / 35%); }
   input[type='range']::-moz-range-thumb { width: .75rem; height: .75rem; border-radius: 50%; border: 2px solid #0d1520; background: #22d3ee; box-shadow: 0 0 8px rgb(34 211 238 / 35%); }
   @media (prefers-reduced-motion: reduce) { .status::before { animation: none; } }
+  .views { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: 1rem; border-bottom: 1px solid #30485c; }
+  .views button { padding: .6rem .8rem; font: inherit; font-size: .875rem; color: #a4b9cc; background: transparent; border: 0; border-bottom: 2px solid transparent; cursor: pointer; }
+  .views button[aria-pressed="true"] { color: #67e8f9; border-bottom-color: #22d3ee; background: #22d3ee12; }
+  .views button:hover { color: #e2e8f0; }
+  .views button:focus-visible { outline: 2px solid #22d3ee; outline-offset: 2px; }
 </style>
