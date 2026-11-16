@@ -2,36 +2,35 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-
 const features = [
   {
-    icon: '📊',
+    icon: 'monitor',
     title: 'Dashboard',
-    description: 'Моніторинг виробництва та споживання електроенергії, стану обладнання й потоків енергії.',
+    description: 'Моніторинг генерації, споживання та стану енергосистеми.',
     href: '/dashboard',
   },
   {
-    icon: '☀️',
+    icon: 'config',
     title: 'Конфігуратор СЕС',
-    description: 'Налаштування сонячних панелей, акумуляторів та інших компонентів енергосистеми.',
+    description: 'Налаштування сонячних панелей, акумуляторів та обладнання.',
     href: '/configurator',
   },
   {
-    icon: '🔌',
+    icon: 'grid',
     title: 'Smart Grid',
-    description: 'Керування підключеними пристроями та аналіз їхнього енергоспоживання.',
+    description: 'Керування електроприладами та оптимізація споживання.',
     href: '/smart-grid',
   },
   {
-    icon: '💰',
+    icon: 'finance',
     title: 'Фінанси та екологія',
-    description: 'Оцінювання економічної ефективності та екологічних показників сонячної електростанції.',
+    description: 'Аналіз економії, ефективності та екологічного впливу.',
     href: '/finance',
   },
   {
-    icon: '🌤️',
+    icon: 'simulation',
     title: 'Симуляція та 3D',
-    description: 'Моделювання погодних умов і тривимірна візуалізація роботи сонячних панелей.',
+    description: 'Моделювання роботи сонячної електростанції.',
     href: '/simulation',
   },
 ];
@@ -39,97 +38,207 @@ const features = [
 
 <Layout
   title="Можливості — SolarFlow"
-  description="Дізнайтеся про основні можливості платформи SolarFlow."
+  description="Основні функціональні модулі платформи SolarFlow."
 >
   <section class="features-page">
-
-
     <h1 class="visually-hidden">Можливості SolarFlow</h1>
 
+    <div class="features-grid">
+      {features.map((feature) => (
+        <a href={feature.href} class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
 
-    
- <div class="features-grid">
-    {features.map((feature) => (
-      <a href={feature.href} class="feature-card">
-        <div class="feature-icon">{feature.icon}</div>
-        <h2>{feature.title}</h2>
-        <p>{feature.description}</p>
-      </a>
-    ))}
-  </div>
-  
+            {feature.icon === 'monitor' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="13" width="4" height="8" rx="1" />
+                <rect x="10" y="8" width="4" height="13" rx="1" />
+                <rect x="17" y="3" width="4" height="18" rx="1" />
+              </svg>
+            )}
 
+            {feature.icon === 'config' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M3 7H21M3 17H21" />
+                <circle cx="9" cy="7" r="3" />
+                <circle cx="16" cy="17" r="3" />
+              </svg>
+            )}
+
+            {feature.icon === 'grid' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M13 2L4 13H11L10 22L20 10H13L13 2Z" />
+              </svg>
+            )}
+
+            {feature.icon === 'finance' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M20 4C9 4 4 9 4 16C4 19 6 21 9 21C16 21 20 14 20 4Z" />
+                <path d="M4 21C7 15 11 11 17 8" />
+              </svg>
+            )}
+
+            {feature.icon === 'simulation' && (
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L21 7V17L12 22L3 17V7L12 2Z" />
+                <path d="M3 7L12 12L21 7M12 12V22" />
+              </svg>
+            )}
+          </div>
+
+          <h2>{feature.title}</h2>
+          <p>{feature.description}</p>
+
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
   </section>
 </Layout>
 
 <style>
   .features-page {
-    padding: 48px 24px 80px;
+    min-height: calc(100vh - 76px);
+    padding: 72px 24px 100px;
   }
 
-
   .features-grid {
-    max-width: var(--container-width);
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 24px;
   }
 
   .feature-card {
-    padding: 34px;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 14px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    grid-column: span 2;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 230px;
+    padding: 28px;
+    overflow: hidden;
+
+    background: var(--shell-surface);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid var(--shell-border);
+    border-radius: var(--shell-card-radius);
+
+    box-shadow: var(--shell-card-shadow);
     text-decoration: none;
-    display: block;
+
+    transition:
+      transform 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      background 0.25s ease;
+  }
+
+  /* Центрування двох карток другого ряду */
+  .feature-card:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  .feature-card:nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+
+    background: var(--shell-accent-gradient);
+    opacity: 0.35;
+    transition: opacity 0.25s ease;
   }
 
   .feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px #0000000c;
+    transform: translateY(-5px);
+    border-color: var(--shell-border-hover);
+
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.35),
+      0 0 20px rgba(34, 211, 238, 0.12);
+  }
+
+  .feature-card:hover::before {
+    opacity: 1;
   }
 
   .feature-card:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 3px;
+    outline: 2px solid var(--shell-primary);
+    outline-offset: 4px;
   }
 
   .feature-icon {
-    margin-bottom: 22px;
-    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+    margin-bottom: 24px;
+
+    color: var(--shell-primary);
+    background: rgba(6, 182, 212, 0.08);
+
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    border-radius: 12px;
+  }
+
+  .feature-icon svg {
+    width: 27px;
+    height: 27px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .feature-icon svg rect {
+    fill: none;
   }
 
   .feature-card h2 {
-    margin: 0 0 14px;
-    color: var(--color-text);
-    font-size: 21px;
+    margin: 0 0 12px;
+    color: var(--shell-text);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
   }
 
   .feature-card p {
     margin: 0;
-    color: var(--color-muted);
-    line-height: 1.7;
+    padding-right: 14px;
+
+    color: var(--shell-muted);
+    font-size: 14px;
+    line-height: 1.65;
   }
 
+  .card-arrow {
+    position: absolute;
+    right: 24px;
+    bottom: 22px;
 
-  @media (max-width: 900px) {
-    .features-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    color: var(--shell-primary);
+    font-size: 21px;
+    opacity: 0.5;
+
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
   }
 
-  @media (max-width: 600px) {
-    .features-page {
-      padding: 55px 20px 70px;
-    }
-
-    .features-grid {
-      grid-template-columns: 1fr;
-    }
+  .feature-card:hover .card-arrow {
+    opacity: 1;
+    transform: translate(3px, -3px);
   }
-
 
   .visually-hidden {
     position: absolute;
@@ -143,4 +252,41 @@ const features = [
     border: 0;
   }
 
+  /* Планшети */
+  @media (max-width: 900px) {
+    .features-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .feature-card,
+    .feature-card:nth-child(4),
+    .feature-card:nth-child(5) {
+      grid-column: auto;
+    }
+  }
+
+  /* Мобільні пристрої */
+  @media (max-width: 600px) {
+    .features-page {
+      padding: 40px 16px 64px;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .feature-card {
+      min-height: 200px;
+      padding: 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feature-card,
+    .feature-card::before,
+    .card-arrow {
+      transition: none;
+    }
+  }
 </style>

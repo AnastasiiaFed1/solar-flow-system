@@ -28,13 +28,16 @@ const {
   </head>
 
   <body>
-	<Header />
+    <div class="solarflow-shell">
+      <Header />
   
-	<main>
-	  <slot />
-	</main>
+      <main class="shell-main">
+        <slot />
+      </main>
+    </div>
   </body>
 </html>
+
 
 <style is:global>
   * {
@@ -52,4 +55,16 @@ const {
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.5;
   }
+
+  .solarflow-shell {
+    min-height: 100vh;
+    background: var(--shell-gradient);
+    color: var(--shell-text);
+  }
+
+  .shell-main {
+    min-height: calc(100vh - 80px);
+    width: 100%;
+  }
 </style>
+
