@@ -1,61 +1,74 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { $energyState, updateEnergyState, syncEnergyFromBackend } from './energyStore';
 
-import { beforeEach, describe, expect, it } from 'vitest';
-
-import {
-    $energySystem,
-    resetEnergySystem,
-    updateEnergyMetrics,
-    updateSystemStatus,
-} from './energyStore';
-
-describe('Energy Store', () => {
+describe('energyStore', () => {
     beforeEach(() => {
-        resetEnergySystem();
-    });
-
-    it('РјР°С” РїРѕС‡Р°С‚РєРѕРІРёР№ СЃС‚Р°РЅ offline', () => {
-        const state = $energySystem.get();
-
-        expect(state.status).toBe('offline');
-        expect(state.metrics.solarPower).toBe(0);
-        expect(state.metrics.batteryLevel).toBe(0);
-    });
-
-    it('РѕРЅРѕРІР»СЋС” РїРѕРєР°Р·РЅРёРєРё РµРЅРµСЂРіРѕСЃРёСЃС‚РµРјРё', () => {
-        updateEnergyMetrics({
-            solarPower: 4.5,
-            consumptionPower: 2.1,
-            batteryLevel: 78,
+        $energyState.set({
+            solarPowerKW: 4.8,
+            homeConsumptionKW: 2.7,
+            gridImportKW: 1.2,
+            gridExportKW: 0,
+            batteryPowerKW: 1.2,
+            batterySoc: 68,
         });
-
-        const state = $energySystem.get();
-
-        expect(state.metrics.solarPower).toBe(4.5);
-        expect(state.metrics.consumptionPower).toBe(2.1);
-        expect(state.metrics.batteryLevel).toBe(78);
-        expect(state.metrics.gridPower).toBe(0);
-        expect(state.metrics.lastUpdated).not.toBe('');
+        vi.restoreAllMocks();
     });
 
-    it('Р·РјС–РЅСЋС” СЃС‚Р°С‚СѓСЃ СЃРёСЃС‚РµРјРё', () => {
-        updateSystemStatus('online');
-
-        expect($energySystem.get().status).toBe('online');
+    it('should initialize with default energy state metrics', () => {
+        const state = $energyState.get();
+        expect(state.solarPowerKW).toBe(4.8);
+        expect(state.homeConsumptionKW).toBe(2.7);
+        expect(state.batterySoc).toBe(68);
     });
 
-    it('СЃРєРёРґР°С” СЃС‚Р°РЅ РґРѕ РїРѕС‡Р°С‚РєРѕРІРёС… Р·РЅР°С‡РµРЅСЊ', () => {
-        updateEnergyMetrics({
-            solarPower: 5,
-            batteryLevel: 90,
-        });
-        updateSystemStatus('online');
+    it('should partially update energy state via updateEnergyState', () => {
+        updateEnergyState({ solarPowerKW: 6.2, batterySoc: 85 });
+        const state = $energyState.get();
+        expect(state.solarPowerKW).toBe(6.2);
+        expect(state.batterySoc).toBe(85);
+        expect(state.homeConsumptionKW).toBe(2.7);
+    });
 
-        resetEnergySystem();
+    it('should sync consumption from backend API and calculate grid export when solar exceeds load', async () => {
+        const mockAppliances = [
+            { id: 1, name: 'Fridge', powerWatts: 200, power: 200, isActive: true },
+            { id: 2, name: 'Boiler', powerWatts: 1800, power: 1800, isActive: true },
+        ];
 
-        const state = $energySystem.get();
+        vi.stubGlobal(
+            'fetch',
+            vi.fn().mockResolvedValue({
+                ok: true,
+                json: async () => mockAppliances,
+            })
+        );
 
-        expect(state.status).toBe('offline');
-        expect(state.metrics.solarPower).toBe(0);
-        expect(state.metrics.batteryLevel).toBe(0);
+        await syncEnergyFromBackend();
+
+        const state = $energyState.get();
+        expect(state.homeConsumptionKW).toBe(2);
+        expect(state.gridExportKW).toBe(2.8);
+        expect(state.gridImportKW).toBe(0);
+    });
+
+    it('should calculate grid import when consumption exceeds solar generation', async () => {
+        const mockAppliances = [
+            { id: 1, name: 'EV Charger', powerKw: 6.5, isActive: true },
+        ];
+
+        vi.stubGlobal(
+            'fetch',
+            vi.fn().mockResolvedValue({
+                ok: true,
+                json: async () => mockAppliances,
+            })
+        );
+
+        await syncEnergyFromBackend();
+
+        const state = $energyState.get();
+        expect(state.homeConsumptionKW).toBe(6.5);
+        expect(state.gridImportKW).toBe(1.7);
+        expect(state.gridExportKW).toBe(0);
     });
 });
