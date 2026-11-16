@@ -1,17 +1,13 @@
-
 ---
 import Layout from '../layouts/Layout.astro';
-import ModulePlaceholder from '../components/shared/ModulePlaceholder.astro';
+import SmartGrid from '../components/vue/SmartGrid.vue';
 ---
 
 <Layout
   title="Smart Grid — SolarFlow"
-  description="Керування електроприладами та моніторинг енергоспоживання."
+  description="Керування підключеними пристроями та аналіз їхнього енергоспоживання."
 >
-  <ModulePlaceholder
-    icon="🔌"
-    title="Smart Grid"
-    description="Керування підключеними пристроями та аналіз їхнього енергоспоживання."
-    technology="Vue"
-  />
+  <main style="max-width: var(--container-width); margin: 0 auto; padding: 32px 24px 80px;">
+    <SmartGrid client:load />
+  </main>
 </Layout>
