@@ -1,0 +1,621 @@
+
+---
+import Layout from '../../layouts/Layout.astro';
+
+const guides = [
+  {
+    title: 'Dashboard',
+    subtitle: 'Моніторинг та керування енергосистемою',
+    href: '/dashboard',
+    sections: [
+      {
+        heading: 'Налаштування початкових параметрів',
+        steps: [
+          'Відкрийте Dashboard через розділ «Можливості».',
+          'У верхній частині сторінки знайдіть повзунок Solar Generation. Переміщуйте його, щоб змінювати потужність сонячної генерації в кВт.',
+          'За допомогою Battery Charge (SoC) встановіть рівень заряду акумулятора у відсотках.',
+          'Спостерігайте за зміною показників енергосистеми після налаштування параметрів.',
+        ],
+      },
+      {
+        heading: 'Аналіз потоків енергії',
+        steps: [
+          'Знайдіть блок Power Flow (Live Energy Distribution).',
+          'Solar Panels показує потужність сонячних панелей, Inverter — вихідну потужність інвертора, Home — споживання будинку.',
+          'Battery відображає потужність заряду або розряду акумулятора, а Grid — взаємодію із зовнішньою електромережею.',
+          'Звертайте увагу на пунктирні лінії, які візуалізують зв’язки та потоки енергії.',
+          'Використовуйте кнопки масштабування зліва від схеми, щоб збільшувати або зменшувати зображення.',
+        ],
+      },
+      {
+        heading: 'Автономна робота та енергобаланс',
+        steps: [
+          'Перегляньте Power Emergency Timer — розрахунковий час автономної роботи на поточному заряді акумулятора.',
+          'У блоці Energy Balance & Flows порівняйте Solar Generation та Home Consumption.',
+          'Перевірте Battery Power і Grid Exchange для аналізу балансу енергосистеми.',
+          'Зверніть увагу на показник автономності, який відображається поруч із балансом.',
+        ],
+      },
+      {
+        heading: 'Діагностика та аварійний сценарій',
+        steps: [
+          'У System Health Matrix перегляньте стан Inverter Unit, Battery Pack, Solar Array та Grid Tie.',
+          'Ознайомтеся з вихідною потужністю і ККД інвертора, зарядом і температурою акумулятора, генерацією та напругою панелей, потужністю і частотою мережі.',
+          'Статуси OK і Warning сигналізують про стан компонентів у поточному сценарії.',
+          'Натисніть Simulate Blackout для перевірки сценарію відключення зовнішньої мережі.',
+          'Після експерименту натисніть Reset, щоб повернути початковий стан демонстраційного сценарію.',
+        ],
+      },
+    ],
+    note: 'Показники Dashboard можуть бути частиною демонстраційної симуляції. Не використовуйте їх як підтверджені вимірювання реального обладнання.',
+  },
+  {
+    title: 'Конфігуратор СЕС',
+    subtitle: 'Проєктування сонячної електростанції',
+    href: '/configurator',
+    sections: [
+      {
+        heading: 'Вибір сонячних панелей',
+        steps: [
+          'Відкрийте сторінку «Конфігуратор СЕС».',
+          'У блоці «Сонячні панелі» виберіть модель панелі зі списку.',
+          'Перевірте значення «Потужність Wp», яке характеризує номінальну потужність однієї панелі.',
+          'Кнопками мінус і плюс змініть кількість панелей.',
+          'Перевірте розраховану площу масиву.',
+        ],
+      },
+      {
+        heading: 'Локація та орієнтація',
+        steps: [
+          'У блоці «Локація та Географія» виберіть місто або доступну географічну локацію.',
+          'Використовуйте карту для перегляду місця встановлення. На карті також є кнопки масштабування.',
+          'У блоці «Орієнтація масиву» перегляньте рекомендовані параметри для вибраної широти.',
+          'Відрегулюйте «Кут нахилу (Tilt)» за допомогою повзунка.',
+          'Встановіть «Азимут (Azimuth)» для визначення напрямку сонячних панелей.',
+          'Спостерігайте, як параметри відображаються на 3D-моделі та в показнику ефективності орієнтації.',
+        ],
+      },
+      {
+        heading: 'Інвертор та акумулятор',
+        steps: [
+          'У блоці «Інвертор» виберіть модель зі списку.',
+          'Перевірте номінальну потужність інвертора.',
+          'Змініть значення ККД повзунком, якщо потрібно дослідити інший сценарій.',
+          'У розділі «Акумуляторна батарея (АКБ)» виберіть тип: LiFePO4 або AGM/GEL.',
+          'Встановіть повну ємність акумулятора у кВт·год.',
+          'Налаштуйте глибину розряду DoD та перевірте розраховану корисну ємність.',
+        ],
+      },
+      {
+        heading: 'Перевірка результатів',
+        steps: [
+          'Відкрийте «Підсумок конфігурації».',
+          'Перегляньте пікову потужність СЕС у kWp, корисну ємність АКБ та орієнтовну річну генерацію.',
+          'У правій частині сторінки огляньте 3D-модель будинку, сонячних панелей, інвертора, акумулятора й зарядної станції.',
+          'Перевірте підписи, що показують потужність, азимут, кут нахилу та інші параметри.',
+          'Натисніть «Зберегти конфіг», якщо бажаєте зберегти налаштовану конфігурацію.',
+        ],
+      },
+    ],
+    note: 'Пікова потужність, річна генерація та ефективність орієнтації є розрахунковими оцінками. Фактичні показники залежать від умов встановлення й обладнання.',
+  },
+  {
+    title: 'Smart Grid',
+    subtitle: 'Керування електроприладами та навантаженням',
+    href: '/smart-grid',
+    sections: [
+      {
+        heading: 'Перевірка стану системи',
+        steps: [
+          'Відкрийте сторінку Smart Grid.',
+          'Перевірте повідомлення у верхній частині сторінки. Якщо .NET API недоступне, інтерфейс може показувати локальні тестові дані.',
+          'Ознайомтеся з блоком «Сценарії Smart Grid» і перевірте, чи активований сценарій.',
+          'За наявності доступного керування налаштуйте поріг заряду АКБ, після досягнення якого дозволяється живлення додаткових навантажень.',
+        ],
+      },
+      {
+        heading: 'Пріоритети електроприладів',
+        steps: [
+          'P1 — критичні споживачі, які повинні мати найвищий пріоритет живлення.',
+          'P2 — стандартні навантаження.',
+          'P3 — надлишкові навантаження, які можуть використовувати надлишок сонячної енергії.',
+          'Зверніть увагу на приклади: холодильник та роутер належать до критичних навантажень, а бойлер і зарядна станція EV — до надлишкових.',
+        ],
+      },
+      {
+        heading: 'Додавання нового приладу',
+        steps: [
+          'У формі додавання введіть назву електроприладу.',
+          'Вкажіть його потужність у ватах.',
+          'Виберіть пріоритет P1, P2 або P3.',
+          'За потреби заповніть поле «Мін. потужність (Вт)» та параметр «Тільки Smart Grid», якщо вони доступні.',
+          'Натисніть «+ Додати прилад».',
+          'Перевірте появу нового приладу у списку.',
+        ],
+      },
+      {
+        heading: 'Керування навантаженням',
+        steps: [
+          'Перегляньте картки наявних приладів, їхню потужність та встановлені пріоритети.',
+          'Якщо елемент керування доступний, змініть пріоритет приладу або стан «Авто-керування Smart Grid».',
+          'Використовуйте кнопку «Видалити», щоб прибрати непотрібний прилад зі списку.',
+          'У блоці «Баланс навантаження по пріоритетах» порівняйте загальне навантаження з генерацією СЕС.',
+          'Перегляньте розподіл навантаження між категоріями P1, P2 і P3.',
+          'Кнопкою «Оновити (API)» спробуйте оновити дані з сервера, якщо API доступне.',
+        ],
+      },
+    ],
+    note: 'Під час роботи з локальними тестовими даними деякі елементи Smart Grid можуть бути недоступними. Це залежить від стану підключення до .NET API.',
+  },
+  {
+    title: 'Фінанси та екологія',
+    subtitle: 'Економічний та екологічний аналіз',
+    href: '/finance',
+    sections: [
+      {
+        heading: 'Економія та окупність',
+        steps: [
+          'Відкрийте сторінку «Фінанси та екологія».',
+          'У блоці Financial ROI & Payback знайдіть показник «Економія за місяць».',
+          'Перегляньте складові щомісячного фінансового результату: економію від власного споживання та дохід від експорту електроенергії.',
+          'У блоці «Термін окупності СЕС» перегляньте розраховану кількість років до повернення початкових інвестицій.',
+          'Під індикатором окупності перевірте враховану вартість інвестицій і потужність СЕС.',
+        ],
+      },
+      {
+        heading: 'Налаштування тарифів',
+        steps: [
+          'Перейдіть до блоку «Тарифи та Валюта».',
+          'Перегляньте тариф мережі, за яким оцінюється вартість електроенергії.',
+          'Перевірте значення «Зелений тариф», що використовується для розрахунку доходу від експорту.',
+          'Натисніть «Редагувати тарифи», щоб відкрити доступні налаштування тарифів.',
+          'Після зміни значень перевірте, як оновилися показники економії та окупності.',
+        ],
+      },
+      {
+        heading: 'Енергетичний обмін та фінансовий графік',
+        steps: [
+          'У блоці Net Metering Balance перегляньте обсяг експорту та імпорту електроенергії в кВт·год.',
+          'У розділі «Фінансова Аналітика» ознайомтеся з графіком надходжень, економії та витрат на імпорт.',
+          'Перемикайте Weekly і Monthly для перегляду доступних часових масштабів.',
+          'Порівняйте результати та визначте періоди з найбільшою економією або витратами.',
+        ],
+      },
+      {
+        heading: 'Екологічні показники',
+        steps: [
+          'Знайдіть блок «Інтерактивний Екологічний Вплив (Dynamic Eco-Impact)».',
+          'Перегляньте розрахунковий еквівалент збережених або посаджених дерев.',
+          'Перевірте оцінку скорочення викидів CO₂ за місяць.',
+          'Ознайомтеся з річним екологічним ефектом у тоннах CO₂.',
+          'Перегляньте еквівалент кілометрів, не пройдених автомобілем.',
+        ],
+      },
+    ],
+    note: 'Фінансові й екологічні результати є модельними оцінками. Якщо сторінка працює в автономному режимі через недоступність API, показники можуть використовувати демонстраційні дані.',
+  },
+  {
+    title: 'Симуляція та 3D',
+    subtitle: 'Дослідження сонячної генерації за різних умов',
+    href: '/simulation',
+    sections: [
+      {
+        heading: 'Початок симуляції',
+        steps: [
+          'Відкрийте сторінку «Симуляція та 3D».',
+          'Перейдіть на вкладку «Симуляція часу».',
+          'У блоці «Погода» виберіть доступний погодний сценарій, наприклад «Ясно».',
+          'Встановіть час доби за допомогою повзунка.',
+          'У списку «Швидкість» виберіть швидкість відтворення, наприклад 1×.',
+          'Натисніть «Запустити», щоб розпочати відтворення сценарію.',
+          'Використовуйте «Скинути час» для повернення часу симуляції до початкового значення.',
+        ],
+      },
+      {
+        heading: 'Налаштування панелей',
+        steps: [
+          'Відрегулюйте «Номінальна потужність» для зміни потужності сонячної установки.',
+          'У блоці «Орієнтація панелей» встановіть кут нахилу.',
+          'Змініть азимут, щоб задати інший напрямок розташування панелей.',
+          'Порівнюйте результати генерації при різних погодних умовах, потужності та орієнтації.',
+          'Якщо станцію не вдалося завантажити, скористайтеся кнопкою «Спробувати ще раз» або введіть кути вручну.',
+        ],
+      },
+      {
+        heading: 'Аналіз виробництва електроенергії',
+        steps: [
+          'У правій частині сторінки перевірте показник «Потужність о 12:00».',
+          'Перегляньте розрахункову енергію за добу в кВт·год.',
+          'Ознайомтеся з графіком «Добова симуляція генерації».',
+          'За допомогою графіка порівняйте виробництво електроенергії в різні години доби.',
+          'За потреби розгорніть «Погодинні значення» для детальнішого аналізу.',
+        ],
+      },
+      {
+        heading: '3D та аналітика',
+        steps: [
+          'Перейдіть на вкладку «3D-орієнтація», щоб ознайомитися з доступною візуалізацією положення панелей.',
+          'Поверніться до налаштувань і змініть нахил або азимут для нового експерименту.',
+          'Перейдіть на вкладку «Аналітика» для перегляду доступних аналітичних результатів.',
+          'Порівняйте показники кількох сценаріїв і визначте, як змінюється прогнозована генерація.',
+        ],
+      },
+    ],
+    note: 'Симуляція використовує модельні умови. Якщо завантаження конфігурації станції не вдалося, на сторінці може бути доступне ручне налаштування кутів.',
+  },
+];
+---
+
+<Layout
+  title="Інструкції — SolarFlow"
+  description="Детальні інструкції з використання модулів SolarFlow."
+>
+  <section class="guides-page">
+    <a class="back-link" href="/service">
+      <span aria-hidden="true">←</span>
+      Повернутися до сервісу
+    </a>
+
+    <header class="page-heading">
+      <div class="heading-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 6.5C9.5 4.8 6.5 4.5 3 5V19C6.5 18.5 9.5 18.8 12 20.5" />
+          <path d="M12 6.5C14.5 4.8 17.5 4.5 21 5V19C17.5 18.5 14.5 18.8 12 20.5" />
+          <path d="M12 6.5V20.5" />
+        </svg>
+      </div>
+
+      <div>
+        <h1>Інструкції</h1>
+        <p>
+          Покрокові посібники з використання
+          функціональних модулів SolarFlow.
+        </p>
+      </div>
+    </header>
+
+    <div class="guides-list">
+      {guides.map((guide, index) => (
+        <details class="guide-card">
+          <summary class="guide-summary">
+            <span class="guide-number">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+
+            <span class="guide-heading">
+              <span class="guide-title">{guide.title}</span>
+              <span class="guide-subtitle">{guide.subtitle}</span>
+            </span>
+
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9L12 15L18 9" />
+            </svg>
+          </summary>
+
+          <div class="guide-content">
+            {guide.sections.map((section) => (
+              <section class="instruction-section">
+                <h2>{section.heading}</h2>
+
+                <ol>
+                  {section.steps.map((step) => (
+                    <li>{step}</li>
+                  ))}
+                </ol>
+              </section>
+            ))}
+
+            <div class="guide-note">
+              <span class="note-label">Важливо</span>
+              <p>{guide.note}</p>
+            </div>
+
+            <a class="module-link" href={guide.href}>
+              Перейти до модуля
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .guides-page {
+    max-width: 1048px;
+    min-height: calc(100vh - 76px);
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 36px;
+    color: var(--shell-muted);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--shell-primary);
+  }
+
+  .page-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  .heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 58px;
+    height: 58px;
+    color: var(--shell-primary);
+    background: rgba(6, 182, 212, 0.09);
+    border: 1px solid var(--shell-border);
+    border-radius: 16px;
+  }
+
+  .heading-icon svg {
+    width: 30px;
+    height: 30px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .page-heading h1 {
+    margin: 0 0 8px;
+    color: var(--shell-text);
+    font-size: clamp(26px, 3vw, 34px);
+    line-height: 1.2;
+  }
+
+  .page-heading p {
+    max-width: 650px;
+    margin: 0;
+    color: var(--shell-muted);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .guides-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .guide-card {
+    overflow: hidden;
+    background: var(--shell-surface);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--shell-border);
+    border-radius: var(--shell-card-radius);
+    box-shadow: var(--shell-card-shadow);
+    transition: border-color 0.2s ease;
+  }
+
+  .guide-card:hover,
+  .guide-card[open] {
+    border-color: var(--shell-border-hover);
+  }
+
+  .guide-summary {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .guide-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .guide-summary:focus-visible {
+    outline: 2px solid var(--shell-primary);
+    outline-offset: -4px;
+    border-radius: var(--shell-card-radius);
+  }
+
+  .guide-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    color: var(--shell-primary);
+    background: var(--shell-surface-inner);
+    border: 1px solid var(--shell-border);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .guide-heading {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .guide-title {
+    color: var(--shell-text);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .guide-subtitle {
+    color: var(--shell-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .chevron {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: var(--shell-primary);
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.2s ease;
+  }
+
+  .guide-card[open] .chevron {
+    transform: rotate(180deg);
+  }
+
+  .guide-content {
+    padding: 0 28px 30px 92px;
+  }
+
+  .instruction-section {
+    margin-bottom: 28px;
+  }
+
+  .instruction-section h2 {
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--shell-border);
+    color: var(--shell-text);
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .instruction-section ol {
+    margin: 0;
+    padding-left: 22px;
+    color: var(--shell-muted);
+  }
+
+  .instruction-section li {
+    padding-left: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .instruction-section li::marker {
+    color: var(--shell-primary);
+    font-weight: 700;
+  }
+
+  .guide-note {
+    margin: 0 0 28px;
+    padding: 18px 20px;
+    border: 1px solid rgba(34, 211, 238, 0.24);
+    border-left: 3px solid var(--shell-primary);
+    border-radius: 10px;
+    background: rgba(6, 182, 212, 0.05);
+  }
+
+  .note-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--shell-primary);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .guide-note p {
+    margin: 0;
+    color: var(--shell-muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .module-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 11px 18px;
+    border-radius: 10px;
+    background: var(--shell-accent-gradient);
+    color: #081720;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .module-link:hover {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+  }
+
+  .module-link:focus-visible,
+  .back-link:focus-visible {
+    outline: 2px solid var(--shell-primary);
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 600px) {
+    .guides-page {
+      padding: 32px 16px 64px;
+    }
+
+    .page-heading {
+      gap: 14px;
+    }
+
+    .heading-icon {
+      width: 46px;
+      height: 46px;
+    }
+
+    .heading-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .guide-summary {
+      gap: 12px;
+      padding: 20px 16px;
+    }
+
+    .guide-number {
+      width: 36px;
+      height: 36px;
+      font-size: 13px;
+    }
+
+    .guide-title {
+      font-size: 16px;
+    }
+
+    .guide-subtitle {
+      font-size: 12px;
+    }
+
+    .guide-content {
+      padding: 0 20px 24px;
+    }
+
+    .instruction-section h2 {
+      font-size: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .guide-card,
+    .chevron,
+    .module-link,
+    .back-link {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,579 @@
+
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Зворотний зв'язок — SolarFlow"
+  description="Повідомлення про помилки, запитання та пропозиції щодо SolarFlow."
+>
+  <section class="feedback-page">
+    <a href="/service" class="back-link">
+      <span aria-hidden="true">←</span>
+      Повернутися до сервісу
+    </a>
+
+    <header class="page-heading">
+      <div class="heading-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M20 15A4 4 0 0 1 16 19H8L3 22V7A4 4 0 0 1 7 3H16A4 4 0 0 1 20 7V15Z" />
+          <path d="M8 10H15M8 14H13" />
+        </svg>
+      </div>
+
+      <div>
+        <h1>Зворотний зв'язок</h1>
+        <p>
+          Повідомте про помилку, запропонуйте
+          покращення або поставте запитання щодо SolarFlow.
+        </p>
+      </div>
+    </header>
+
+    <div class="feedback-layout">
+      <div class="form-card">
+        <h2>Створити звернення</h2>
+        <p class="form-intro">
+          Заповніть поля нижче. Ми підготуємо звернення
+          для публікації в GitHub Issues.
+        </p>
+
+        <form id="feedback-form">
+          <div class="field">
+            <label for="feedback-type">Тип звернення</label>
+
+            <select id="feedback-type" name="type" required>
+              <option value="bug">Повідомлення про помилку</option>
+              <option value="feature">Пропозиція щодо покращення</option>
+              <option value="question">Запитання</option>
+              <option value="other">Інший відгук</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="feedback-module">Розділ SolarFlow</label>
+
+            <select id="feedback-module" name="module">
+              <option value="Загальне">Загальне</option>
+              <option value="Dashboard">Dashboard</option>
+              <option value="Конфігуратор СЕС">Конфігуратор СЕС</option>
+              <option value="Smart Grid">Smart Grid</option>
+              <option value="Фінанси та екологія">
+                Фінанси та екологія
+              </option>
+              <option value="Симуляція та 3D">
+                Симуляція та 3D
+              </option>
+              <option value="Сервіс">Сервіс</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="feedback-title">Тема звернення</label>
+
+            <input
+              id="feedback-title"
+              name="title"
+              type="text"
+              placeholder="Коротко опишіть питання або проблему"
+              maxlength="120"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="feedback-message">Повідомлення</label>
+
+            <textarea
+              id="feedback-message"
+              name="message"
+              rows="7"
+              maxlength="1500"
+              placeholder="Опишіть, що сталося, які дії виконували або що пропонуєте покращити..."
+              required
+            ></textarea>
+
+            <span class="field-hint">
+              До 1500 символів. Для повідомлення про помилку
+              вкажіть кроки її відтворення.
+            </span>
+          </div>
+
+          <div class="privacy-notice">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 11V16M12 8H12.01" />
+            </svg>
+
+            <p>
+              Звернення публікується через GitHub.
+              Якщо репозиторій публічний, текст звернення
+              буде доступний іншим користувачам.
+              Не додавайте паролі, ключі доступу
+              або персональні дані.
+            </p>
+          </div>
+
+          <button type="submit" class="submit-button">
+            Продовжити в GitHub
+            <span aria-hidden="true">↗</span>
+          </button>
+        </form>
+      </div>
+
+      <aside class="sidebar">
+        <div class="side-card">
+          <div class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M9.5 9A2.5 2.5 0 1 1 13.5 11C12.5 11.7 12 12.3 12 13.5" />
+              <path d="M12 17H12.01" />
+            </svg>
+          </div>
+
+          <h2>Потрібна підказка?</h2>
+          <p>
+            Перегляньте відповіді на поширені запитання
+            про роботу платформи.
+          </p>
+
+          <a href="/service/help" class="side-link">
+            Центр допомоги
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div class="side-card">
+          <div class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 6.5C9.5 4.8 6.5 4.5 3 5V19C6.5 18.5 9.5 18.8 12 20.5" />
+              <path d="M12 6.5C14.5 4.8 17.5 4.5 21 5V19C17.5 18.5 14.5 18.8 12 20.5" />
+              <path d="M12 6.5V20.5" />
+            </svg>
+          </div>
+
+          <h2>Інструкції з використання</h2>
+          <p>
+            Покрокові посібники для всіх п'яти
+            функціональних модулів SolarFlow.
+          </p>
+
+          <a href="/service/guides" class="side-link">
+            Переглянути інструкції
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div class="side-card">
+          <h2>Репозиторій проєкту</h2>
+
+          <p>
+            Перегляньте наявні звернення, щоб
+            перевірити, чи не повідомляли про проблему раніше.
+          </p>
+
+          <a
+            href="https://github.com/AnastasiiaFed1/solar-flow-system/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="side-link"
+          >
+            GitHub Issues
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>(
+    '#feedback-form'
+  );
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    if (!form.reportValidity()) {
+      return;
+    }
+
+    const type = form.querySelector<HTMLSelectElement>(
+      '#feedback-type'
+    )?.value ?? 'other';
+
+    const module = form.querySelector<HTMLSelectElement>(
+      '#feedback-module'
+    )?.value ?? 'Загальне';
+
+    const title = form.querySelector<HTMLInputElement>(
+      '#feedback-title'
+    )?.value.trim() ?? '';
+
+    const message = form.querySelector<HTMLTextAreaElement>(
+      '#feedback-message'
+    )?.value.trim() ?? '';
+
+    if (!title || !message) {
+      return;
+    }
+
+    const typeNames: Record<string, string> = {
+      bug: 'Помилка',
+      feature: 'Пропозиція',
+      question: 'Запитання',
+      other: 'Відгук',
+    };
+
+    const typeName = typeNames[type] ?? 'Відгук';
+
+    const issueTitle = `[${typeName}] ${title}`;
+
+    const issueBody = [
+      `### Тип звернення`,
+      typeName,
+      '',
+      `### Розділ SolarFlow`,
+      module,
+      '',
+      `### Опис`,
+      message,
+      '',
+      '---',
+      'Звернення підготовлено через форму SolarFlow.',
+    ].join('\n');
+
+    const url = new URL(
+      'https://github.com/AnastasiiaFed1/solar-flow-system/issues/new'
+    );
+
+    url.searchParams.set('title', issueTitle);
+    url.searchParams.set('body', issueBody);
+
+    window.location.assign(url.toString());
+  });
+</script>
+
+<style>
+  .feedback-page {
+    max-width: 1120px;
+    min-height: calc(100vh - 76px);
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 36px;
+    color: var(--shell-muted);
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--shell-primary);
+  }
+
+  .page-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  .heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 58px;
+    height: 58px;
+    color: var(--shell-primary);
+    background: rgba(6, 182, 212, 0.09);
+    border: 1px solid var(--shell-border);
+    border-radius: 16px;
+  }
+
+  .heading-icon svg {
+    width: 30px;
+    height: 30px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .page-heading h1 {
+    margin: 0 0 8px;
+    color: var(--shell-text);
+    font-size: clamp(26px, 3vw, 34px);
+  }
+
+  .page-heading p {
+    max-width: 650px;
+    margin: 0;
+    color: var(--shell-muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .feedback-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(270px, 1fr);
+    align-items: start;
+    gap: 24px;
+  }
+
+  .form-card,
+  .side-card {
+    background: var(--shell-surface);
+    border: 1px solid var(--shell-border);
+    border-radius: var(--shell-card-radius);
+    box-shadow: var(--shell-card-shadow);
+  }
+
+  .form-card {
+    padding: 32px;
+  }
+
+  .form-card h2 {
+    margin: 0 0 8px;
+    color: var(--shell-text);
+    font-size: 21px;
+  }
+
+  .form-intro {
+    margin: 0 0 30px;
+    color: var(--shell-muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .field label {
+    color: var(--shell-text);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid var(--shell-border);
+    border-radius: 10px;
+    background: var(--shell-surface-inner);
+    color: var(--shell-text);
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .field select {
+    color-scheme: dark;
+    cursor: pointer;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: #718399;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--shell-primary);
+  }
+
+  .field-hint {
+    color: var(--shell-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .privacy-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 6px 0 26px;
+    padding: 16px;
+    border: 1px solid var(--shell-border);
+    border-radius: 10px;
+    background: rgba(6, 182, 212, 0.05);
+  }
+
+  .privacy-notice svg {
+    flex-shrink: 0;
+    width: 21px;
+    height: 21px;
+    color: var(--shell-primary);
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  .privacy-notice p {
+    margin: 0;
+    color: var(--shell-muted);
+    font-size: 12px;
+    line-height: 1.75;
+  }
+
+  .submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    background: var(--shell-accent-gradient);
+    color: #081720;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 22px rgba(34, 211, 238, 0.3);
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .side-card {
+    padding: 26px;
+  }
+
+  .side-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 20px;
+    border-radius: 11px;
+    color: var(--shell-primary);
+    background: rgba(6, 182, 212, 0.09);
+    border: 1px solid var(--shell-border);
+  }
+
+  .side-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .side-card h2 {
+    margin: 0 0 10px;
+    color: var(--shell-text);
+    font-size: 17px;
+  }
+
+  .side-card p {
+    margin: 0 0 18px;
+    color: var(--shell-muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .side-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--shell-primary);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .side-link:hover {
+    text-decoration: underline;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--shell-primary);
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 800px) {
+    .feedback-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .feedback-page {
+      padding: 32px 16px 64px;
+    }
+
+    .page-heading {
+      gap: 14px;
+    }
+
+    .heading-icon {
+      width: 46px;
+      height: 46px;
+    }
+
+    .heading-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .form-card {
+      padding: 22px;
+    }
+
+    .sidebar {
+      grid-template-columns: 1fr;
+    }
+
+    .submit-button {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .submit-button,
+    .field input,
+    .field select,
+    .field textarea {
+      transition: none;
+    }
+  }
+</style>
