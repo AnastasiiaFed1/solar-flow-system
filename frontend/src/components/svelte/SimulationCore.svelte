@@ -16,7 +16,7 @@
 </script>
 
 <section class="simulation" aria-labelledby="simulation-title">
-  <div class="heading"><a class="back" href="/features">← До можливостей</a><h1 id="simulation-title">Симуляція сонячної генерації</h1>
+  <div class="heading"><a class="back" href="/features">← До можливостей</a><div class="title-row"><h1 id="simulation-title"><span>SolarFlow</span> / Симуляція сонячної генерації</h1><span class="status" class:idle={power === 0}>{power > 0 ? "Генерація активна" : "Генерація відсутня"}</span></div>
   <p class="muted">Змінюй погоду, час та орієнтацію панелей, щоб порівняти виробіток.</p></div>
 
   <div class="workspace">
@@ -31,18 +31,18 @@
         </select>
       </label>
       <label>Час доби <strong>{time(hour)}</strong>
-        <input type="range" min="0" max="23" bind:value={hour} aria-valuetext={time(hour)} />
+        <input type="range" min="0" max="23" bind:value={hour} style:--progress={(hour / 23 * 100) + "%"} aria-valuetext={time(hour)} />
       </label>
       <label>Номінальна потужність <strong>{format.format(capacityKw)} кВт</strong>
-        <input type="range" min="1" max="20" step="0.5" bind:value={capacityKw} />
+        <input type="range" min="1" max="20" step="0.5" bind:value={capacityKw} style:--progress={((capacityKw - 1) / 19 * 100) + "%"} />
       </label>
     </div>
       <div class="card"><h2>Орієнтація панелей</h2>
       <label>Нахил <strong>{tilt}°</strong>
-        <input type="range" min="0" max="90" bind:value={tilt} />
+        <input type="range" min="0" max="90" bind:value={tilt} style:--progress={(tilt / 90 * 100) + "%"} />
       </label>
       <label>Азимут <strong>{azimuth}°</strong>
-        <input type="range" min="0" max="359" bind:value={azimuth} />
+        <input type="range" min="0" max="359" bind:value={azimuth} style:--progress={(azimuth / 359 * 100) + "%"} />
       </label>
       <p class="muted directions">0° — північ, 90° — схід, 180° — південь, 270° — захід.</p></div>
     </div>
@@ -74,22 +74,22 @@
 </section>
 
 <style>
-  .simulation { max-width: 1280px; margin: auto; padding: 1.25rem clamp(1rem, 3vw, 2rem) 2.5rem; color: #e3edf7; }
+  .simulation { max-width: 1280px; margin: auto; padding: 1.5rem; color: #e2e8f0; }
   .heading { border-bottom: 1px solid #30485c; padding-bottom: 1rem; }
   .back { display: inline-block; border: 1px solid #3d5a74; border-radius: .35rem; padding: .24rem .65rem; color: #a9c4db; font-size: .82rem; text-decoration: none; margin-bottom: .8rem; }
   .back:hover { color: #67f3ec; border-color: #67f3ec; }
-  h1 { font-size: clamp(1.4rem, 3.5vw, 2rem); line-height: 1.15; margin: 0; }
-  h2 { font-size: 1rem; margin: 0 0 .75rem; }
-  .muted { color: #a4b9cc; margin: .45rem 0 0; }
-  .workspace { display: grid; grid-template-columns: minmax(240px, 2fr) minmax(0, 3fr); gap: 1rem; margin-top: 1rem; }
-  .controls { display: grid; align-content: start; gap: .85rem; }
-  .card, .results { background: linear-gradient(145deg, #172b3d, #111e2c 65%); border: 1px solid #2e5268; border-radius: .65rem; padding: clamp(.85rem, 2vw, 1.25rem); box-shadow: inset 0 0 12px #4ec9ff10; }
+  h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.025em; line-height: 1.15; margin: 0; }
+  h2 { font-size: .875rem; font-weight: 700; color: #f1f5f9; margin: 0 0 .75rem; }
+  .muted { color: #94a3b8; margin: .45rem 0 0; }
+  .workspace { display: grid; grid-template-columns: minmax(240px, 2fr) minmax(0, 3fr); gap: 1.5rem; margin-top: 1.5rem; }
+  .controls { display: grid; align-content: start; gap: 1.5rem; }
+  .card, .results { background: rgb(22 34 49 / 90%); backdrop-filter: blur(12px); border: 1px solid rgb(6 182 212 / 20%); border-radius: 1rem; padding: 1.25rem; box-shadow: 0 4px 24px rgb(0 0 0 / 30%); }
   label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .45rem; margin-bottom: .9rem; font-size: .9rem; }
   label:last-child { margin-bottom: 0; }
-  strong { color: #76f5ed; font-variant-numeric: tabular-nums; }
+  strong { color: #22d3ee; font-variant-numeric: tabular-nums; }
   input, select { width: 100%; margin: 0; accent-color: #42e1db; color-scheme: dark; }
   select { font: inherit; padding: .45rem .55rem; border: 1px solid #3b5d77; border-radius: .35rem; background: #21384e; color: inherit; }
-  :is(a, input, select):focus-visible { outline: 2px solid #76f5ed; outline-offset: 3px; }
+  :is(a, input, select):focus-visible { outline: 2px solid #22d3ee; outline-offset: 3px; }
   .directions, .note { font-size: .8rem; }
   .scene { position: relative; overflow: hidden; border-radius: .45rem; background: #071220; border: 1px solid #29465e; }
   .scene img { display: block; width: 100%; height: auto; aspect-ratio: 1.85; object-fit: cover; }
@@ -101,16 +101,27 @@
       repeating-linear-gradient(0deg, #153e75 0 31%, #6db7dc 32% 33.3%);
     box-shadow: 0 0 12px #49d8f477; transform: rotateX(35deg) rotateZ(var(--azimuth)) rotateX(var(--tilt)); }
   .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: .85rem 0 1rem; }
-  .metrics div { min-width: 0; padding: .55rem .65rem; background: #0c1c2a; border: 1px solid #2d5368; border-radius: .4rem; }
+  .metrics div { min-width: 0; padding: .55rem .65rem; background: #0d1520; border: 1px solid #2d5368; border-radius: .4rem; }
   .metrics span, .metrics strong { display: block; }
-  .metrics span { font-size: .78rem; color: #adc2d5; }
-  .metrics strong { font-size: clamp(1rem, 2.4vw, 1.45rem); }
+  .metrics span { font-size: .78rem; color: #94a3b8; }
+  .metrics strong { font-size: clamp(1.25rem, 3vw, 1.875rem); font-weight: 800; letter-spacing: -.025em; filter: drop-shadow(0 0 8px rgb(34 211 238 / 30%)); }
   .chart { display: grid; grid-template-columns: repeat(24, minmax(0, 1fr)); gap: 3px; height: 6rem;
     border-bottom: 1px solid #48657b; background: repeating-linear-gradient(to top, transparent 0 calc(25% - 1px), #2a4155 calc(25% - 1px) 25%); }
   .column { display: flex; align-items: end; min-width: 0; }
   .column.active { background: #38e7dd20; }
-  .bar { width: 100%; background: linear-gradient(#58e9e0, #285ea9); border-radius: .15rem .15rem 0 0; }
-  .active .bar { background: #76fff1; box-shadow: 0 0 9px #5effed80; }
-  .axis { display: flex; justify-content: space-between; font-size: .7rem; color: #a4b9cc; padding-top: .3rem; }
+  .bar { width: 100%; background: linear-gradient(to top, #06b6d4, #5eead4); transition: height 500ms ease; border-radius: .15rem .15rem 0 0; }
+  .active .bar { background: #5eead4; box-shadow: 0 0 9px #5effed80; }
+  .axis { display: flex; justify-content: space-between; font-size: .7rem; color: #94a3b8; padding-top: .3rem; }
   @media (max-width: 680px) { .workspace { grid-template-columns: 1fr; } }
+  .title-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+  h1 span { color: #22d3ee; }
+  .status { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; background: #162333; border: 1px solid rgb(6 182 212 / 30%); padding: .375rem .875rem; color: #34d399; font-size: .75rem; font-weight: 500; }
+  .status::before { content: ''; width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; box-shadow: 0 0 12px rgb(16 185 129 / 35%); animation: pulse 2s ease-in-out infinite; }
+  .status.idle { color: #fbbf24; }
+  .status.idle::before { animation: none; }
+  @keyframes pulse { 50% { opacity: .5; } }
+  input[type='range'] { appearance: none; height: .625rem; border-radius: 999px; border: 1px solid rgb(6 182 212 / 20%); background: linear-gradient(to right, #06b6d4, #5eead4) left / var(--progress) 100% no-repeat #0d1520; cursor: pointer; }
+  input[type='range']::-webkit-slider-thumb { appearance: none; width: 1rem; height: 1rem; border-radius: 50%; border: 2px solid #0d1520; background: #22d3ee; box-shadow: 0 0 8px rgb(34 211 238 / 35%); }
+  input[type='range']::-moz-range-thumb { width: .75rem; height: .75rem; border-radius: 50%; border: 2px solid #0d1520; background: #22d3ee; box-shadow: 0 0 8px rgb(34 211 238 / 35%); }
+  @media (prefers-reduced-motion: reduce) { .status::before { animation: none; } .bar { transition: none; } }
 </style>
